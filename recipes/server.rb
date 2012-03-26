@@ -22,8 +22,15 @@ include_recipe "apache2"
 include_recipe "apache2::mod_rewrite"
 include_recipe "munin::client"
 
-sysadmins = search(:users, 'groups:sysadmin')
-munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+munin_servers = []
+sysadmins = []
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  sysadmins = search(:users, 'groups:sysadmin')
+  munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+end
+
 if munin_servers.empty?
   Chef::Log.info("No nodes returned from search, using this node so munin configuration has data")
   munin_servers = Array.new
