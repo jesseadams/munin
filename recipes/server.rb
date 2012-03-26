@@ -30,27 +30,27 @@ if munin_servers.empty?
   munin_servers << node
 end
 
-munin_servers.sort! { |a,b| a[:fqdn] <=> b[:fqdn] }
+munin_servers.sort! { |a,b| a['fqdn'] <=> b['fqdn'] }
 
-if node[:public_domain]
+if node['public_domain']
   case node.chef_environment
   when "production"
-    public_domain = node[:public_domain]
+    public_domain = node['public_domain']
   else
-    public_domain = "#{node.chef_environment}.#{node[:public_domain]}"
+    public_domain = "#{node.chef_environment}.#{node['public_domain']}"
   end
 else
-  public_domain = node[:domain]
+  public_domain = node['domain']
 end
 
-case node[:platform]
+case node['platform']
 when "freebsd"
   package "munin-master"
 else
   package "munin"
 end
 
-case node[:platform]
+case node['platform']
 when "arch"
   cron "munin-graph-html" do
     command "/usr/bin/munin-cron"
@@ -99,11 +99,11 @@ apache_site "000-default" do
   enable false
 end
 
-template "#{node[:apache][:dir]}/sites-available/munin.conf" do
+template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source "apache2.conf.erb"
   mode 0644
   variables(:public_domain => public_domain, :docroot => node['munin']['docroot'])
-  if ::File.symlink?("#{node[:apache][:dir]}/sites-enabled/munin.conf")
+  if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, resources(:service => "apache2")
   end
 end

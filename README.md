@@ -154,7 +154,7 @@ Then for example in your memcache recipe
       memcached_traffic_
     ).each do |plugin_name|
       munin_plugin plugin_name do
-        plugin "#{plugin_name}#{node[:ipaddress].gsub('.','_')}_#{node[:memcached][:port]}"
+        plugin "#{plugin_name}#{node['ipaddress'].gsub('.','_')}_#{node['memcached']['port']}"
         create_file true
       end
     end

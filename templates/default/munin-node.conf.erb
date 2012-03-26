@@ -27,8 +27,8 @@ ignore_file \.rpm(save|new)$
 # telnetting to localhost, port 4949
 #
 #host_name localhost.localdomain
-<% if node[:ec2] %>
-host_name <%= node[:hostname] %>.ec2.internal
+<% if node['ec2'] %>
+host_name <%= node['hostname'] %>.ec2.internal
 <% end %>
 
 # A list of addresses that are allowed to connect.  This must be a
@@ -37,7 +37,7 @@ host_name <%= node[:hostname] %>.ec2.internal
 # the allow line as many times as you'd like
 
 <% @munin_servers.sort.each do |server| -%>
-allow ^<%= server[:ipaddress].to_s.gsub(/\./, '\.') %>$
+allow ^<%= server['ipaddress'].to_s.gsub(/\./, '\.') %>$
 <% end -%>
 allow ^127\.0\.0\.1$
 
