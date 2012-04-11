@@ -6,6 +6,10 @@ htmldir <%= @docroot %>
 logdir  /var/log/munin
 rundir  /var/run/munin
 
+<% node['munin']['contacts'].each do |kind, command| %>
+contact.<%= kind %>.contact  <%= command %>
+<% end %>
+
 # Where to look for the HTML templates
 tmpldir <%= node['munin']['tmpldir'] %>
 

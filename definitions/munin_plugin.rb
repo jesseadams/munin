@@ -18,7 +18,7 @@
 #
 
 
-define :munin_plugin, :create_file => false, :enable => true do
+define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'munin' do
 
   include_recipe "munin::client"
 
@@ -28,7 +28,7 @@ define :munin_plugin, :create_file => false, :enable => true do
 
   if params[:create_file]
     cookbook_file "#{plugin_dir}/#{params[:name]}" do
-      cookbook "munin"
+      cookbook params[:cookbook]
       source "plugins/#{params[:name]}"
       owner "root"
       group node['munin']['root']['group']
