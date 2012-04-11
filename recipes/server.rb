@@ -20,15 +20,15 @@
 web_srv = node[:munin][:web_server].to_sym
 case web_srv
 when :apache
+  include_recipe 'munin::server_apache'
   web_user = node[:apache][:user]
   web_group = node[:apache][:group]
-  include_recipe 'munin::apache'
 when :nginx
+  include_recipe 'munin::server_nginx'
   web_user = node[:nginx][:user]
   web_group = node[:nginx][:group]
-  include_recipe 'munin::nginx'
 else
-  raise "UNSUPPORTED"
+  raise "Unsupported web server type provided for munin. Supported: apache or nginx"
 end
 
 include_recipe "munin::client"
@@ -96,14 +96,14 @@ when "openid"
   if(web_srv == :apache)
     include_recipe "apache2::mod_auth_openid"
   else
-    raise "UNSUPPORTED"
+    raise "OpenID is unsupported on non-apache installs"
   end
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner "munin"
     group web_group 
-    mode 0640
+    mode 0644
     variables(
       :sysadmins => sysadmins
     )
