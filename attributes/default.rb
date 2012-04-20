@@ -21,6 +21,8 @@ default['munin']['sysadmin_email'] = "ops@example.com"
 default['munin']['server_role'] = 'monitoring'
 default['munin']['server_auth_method'] = 'openid'
 
+default['munin']['web_server'] = 'apache'
+
 case node[:platform]
 when "arch"
   default['munin']['basedir'] = "/etc/munin"
@@ -28,7 +30,7 @@ when "arch"
   default['munin']['docroot'] = "/srv/http/munin"
   default['munin']['dbdir'] = "/var/lib/munin"
   default['munin']['root']['group'] = "root"
-when "centos","redhat","amazon"
+when "centos","redhat"
   default['munin']['basedir'] = "/etc/munin"
   default['munin']['plugin_dir'] = "/usr/share/munin/plugins"
   default['munin']['docroot'] = "/var/www/html/munin"
