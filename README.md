@@ -34,6 +34,8 @@ Not required, but recommended to install perl cpan modules for munin plugins
 
 * perl
 
+* nginx
+
 Attributes
 ==========
 
@@ -41,6 +43,7 @@ Attributes
 * `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
 * `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 * `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
+* `node['munin']['web_server']` - supports apache or nginx, default is "apache"
 
 Recipes
 =======
@@ -54,6 +57,8 @@ server
 ------
 
 The server recipe will set up the munin server with Apache. It will create a cron job for generating the munin graphs, search for any nodes that have munin attributes (`node['munin']`), and use those nodes to connect for the graphs.
+
+Optionally the server can be setup with NGINX.
 
 Data Bags
 =========

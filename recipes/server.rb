@@ -16,10 +16,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-node['apache']['default_modules'] << 'expires' if platform?("redhat", "centos", "scientific", "fedora", "amazon")
 
-include_recipe "apache2"
-include_recipe "apache2::mod_rewrite"
+web_srv = node[:munin][:web_server].to_sym
+case web_srv
+when :apache
+  include_recipe 'munin::server_apache'
+  web_user = node[:apache][:user]
+  web_group = node[:apache][:group]
+when :nginx
+  include_recipe 'munin::server_nginx'
+  web_user = node[:nginx][:user]
+  web_group = node[:nginx][:group]
+else
+  raise "Unsupported web server type provided for munin. Supported: apache or nginx"
+end
+
 include_recipe "munin::client"
 
 sysadmins = search(:users, 'groups:sysadmin')
@@ -82,29 +93,20 @@ end
 
 case node['munin']['server_auth_method']
 when "openid"
-  include_recipe "apache2::mod_auth_openid"
+  if(web_srv == :apache)
+    include_recipe "apache2::mod_auth_openid"
+  else
+    raise "OpenID is unsupported on non-apache installs"
+  end
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner "munin"
-    group node['apache']['group']
-    mode 0640
+    group web_group 
+    mode 0644
     variables(
       :sysadmins => sysadmins
     )
-  end
-end
-
-apache_site "000-default" do
-  enable false
-end
-
-template "#{node[:apache][:dir]}/sites-available/munin.conf" do
-  source "apache2.conf.erb"
-  mode 0644
-  variables(:public_domain => public_domain, :docroot => node['munin']['docroot'])
-  if ::File.symlink?("#{node[:apache][:dir]}/sites-enabled/munin.conf")
-    notifies :reload, resources(:service => "apache2")
   end
 end
 
@@ -114,4 +116,3 @@ directory node['munin']['docroot'] do
   mode 0755
 end
 
-apache_site "munin.conf"
