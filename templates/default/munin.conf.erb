@@ -8,7 +8,7 @@ rundir  /var/run/munin
 
 <% node['munin']['contacts'].each do |kind, command| %>
 contact.<%= kind %>.contact  <%= command %>
-<% end %>
+<% end if node['munin']['contacts'] %>
 
 # Where to look for the HTML templates
 tmpldir <%= node['munin']['tmpldir'] %>
