@@ -1,4 +1,4 @@
-node['apache']['default_modules'] << 'expires' if platform?("redhat", "centos", "scientific", "fedora")
+node['apache']['default_modules'] << 'expires' if platform?("redhat", "centos", "scientific", "fedora", "amazon")
 
 include_recipe "apache2"
 include_recipe "apache2::mod_rewrite"
