@@ -44,6 +44,9 @@ Attributes
 * `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 * `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 * `node['munin']['web_server']` - supports apache or nginx, default is "apache"
+* `node['munin']['max_processes']` - Maximum number of simultaneous Munin-update processes. When not set, munin will use as many as necessary. Default is to use as many as necessary.
+* `node['munin']['max_graph_jobs']` - Maximum number of parallel processes used by munin-graph when calling rrdgraph, default is "6"
+* `node['munin']['max_cgi_graph_jobs']` - Maximum number of parallel munin-cgi-graph or munin-fastcgi-graph jobs, default is "6"
 
 Recipes
 =======

@@ -13,6 +13,12 @@ contact.<%= kind %>.contact  <%= command %>
 # Where to look for the HTML templates
 tmpldir <%= node['munin']['tmpldir'] %>
 
+<% if node['munin']['max_processes'] %>
+max_processes <%= node['munin']['max_processes'] %>
+<% end %>
+max_graph_jobs <%= node['munin']['max_graph_jobs'] %>
+max_cgi_graph_jobs <%= node['munin']['max_cgi_graph_jobs'] %>
+
 # a simple host tree
 <% @munin_nodes.each do |system| -%>
 [<%= system[:hostname] %>]
@@ -20,3 +26,4 @@ tmpldir <%= node['munin']['tmpldir'] %>
     use_node_name yes
 
 <% end -%>
+
