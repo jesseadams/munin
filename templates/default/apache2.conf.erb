@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost *:<%= @listen_port %>>
   ServerAdmin     <%= node['munin']['sysadmin_email'] %>
   ServerName      <%= node['fqdn'] %>
   ServerAlias     munin munin.<%= node.chef_environment =~ /_default/ ? "default" : node.chef_environment %>.<%= @public_domain %>
