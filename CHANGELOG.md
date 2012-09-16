@@ -1,3 +1,10 @@
+## v1.1.0:
+
+* [COOK-1122] - amazon platform support
+* [COOK-1143] - munin_plugin() should accept an optional cookbook parameter
+* [COOK-1205] - Add NGINX support to munin
+* [COOK-1517] - attributes for `max_processes`, `max_graph_jobs`, and `max_cgi_graph_jobs`
+
 ## v1.0.2:
 
 * [COOK-920] - FreeBSD support
