@@ -31,7 +31,7 @@ template munin_conf do
     :public_domain => public_domain,
     :docroot => node['munin']['docroot'],
     :log_dir => node['nginx']['log_dir'],
-    :listen_port => 80,
+    :listen_port => node['munin']['web_server_port'],
     :htpasswd_file => File.join(node['munin']['basedir'], 'htpasswd.users')
   )
   if(::File.symlink?(munin_conf))
