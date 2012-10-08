@@ -69,7 +69,7 @@ Data Bags
 Create a `users` data bag that will contain the users that will be able to log into the Munin webui. Each user can use htauth with a specified password, or an openid. Users that should be able to log in should be in the sysadmin group. Example user data bag item:
 
     {
-      "id": "munin,
+      "id": "munin",
       "groups": "sysadmin",
       "htpasswd": "hashed_htpassword",
       "openid": "http://munin.myopenid.com/"
