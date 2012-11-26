@@ -1,3 +1,8 @@
+## v1.1.2:
+
+* [COOK-1600] - add an attribute for setting the listen port.
+* [COOK-1750] - readme typo fix
+
 ## v1.1.0:
 
 * [COOK-1122] - amazon platform support
