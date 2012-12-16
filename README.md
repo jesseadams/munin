@@ -116,7 +116,7 @@ The htpasswd must be the hashed value. Get this value with htpasswd:
     % htpasswd -n -s munin
     New password:
     Re-type new password:
-    nagiosadmin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
+    munin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
 
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 
