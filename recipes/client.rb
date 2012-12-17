@@ -36,7 +36,7 @@ template "#{node['munin']['basedir']}/munin-node.conf" do
 end
 
 case node[:platform]
-when "arch"
+when "arch", "smartos"
   execute "munin-node-configure --shell | sh" do
     not_if { Dir.entries(node['munin']['plugins']).length > 2 }
     notifies :restart, resources(:service => service_name)
