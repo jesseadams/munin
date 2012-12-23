@@ -96,12 +96,14 @@ able to log into the Munin webui. Each user can use htauth with a
 specified password, or an openid. Users that should be able to log in
 should be in the sysadmin group. Example user data bag item:
 
-    {
-      "id": "munin",
-      "groups": "sysadmin",
-      "htpasswd": "hashed_htpassword",
-      "openid": "http://munin.myopenid.com/"
-    }
+```json
+{
+  "id": "munin",
+  "groups": "sysadmin",
+  "htpasswd": "hashed_htpassword",
+  "openid": "http://munin.myopenid.com/"
+}
+```
 
 When using `server_auth_method` 'openid', use the openid in the data bag
 item. Any other value for this attribute (e.g., "htauth", "htpasswd",
@@ -126,12 +128,14 @@ Usage
 Create a role named `monitoring` that includes the munin::server
 recipe in the run list. Adjust the docroot to suit your environment.
 
-    % cat roles/monitoring.rb
-    name "monitoring"
-    description "The monitoring server"
-    run_list(
-      "recipe[munin::server]"
-    )
+```ruby
+# roles/monitoring.rb
+name "monitoring"
+description "The monitoring server"
+run_list(
+  "recipe[munin::server]"
+)
+```
 
 Apply this role to a node and it will be the munin server. Optionally
 create a DNS entry for it as munin, that will be used in the Apache
@@ -140,10 +144,15 @@ vhost.
 Use Chef 0.10's environments. For example, create a "production"
 environment Ruby DSL file and upload it to the Chef Server
 
-    % cat environments/production.rb
-    name "production"
-    description "Nodes in production"
-    % knife environment from file production.rb
+```ruby
+# environments/production.rb
+name "production"
+description "Nodes in production"
+```
+
+```
+% knife environment from file production.rb
+```
 
 Clients will automatically search for the server based on the value of
 the `node['munin']['server_role']` attribute in the same environment.
@@ -170,14 +179,18 @@ The munin cookbook now has a definition that can be used to enable a
 new plugin for data gathering on a client. If an existing munin plugin
 is desired, call the definition
 
-    munin_plugin "nfs_client"
+```ruby
+munin_plugin "nfs_client"
+```
 
 By default the plugin file name is the name parameter here. Specify
 the plugin parameter to use something else.
 
-    munin_plugin "nfs_client"
-      plugin "nfs_client_"
-    end
+```ruby
+munin_plugin "nfs_client"
+  plugin "nfs_client_"
+end
+```
 
 This creates a symlink from the plugins distribution directory,
  `/usr/share/munin/plugins` to the enabled plugins directory,
@@ -190,40 +203,48 @@ cookbook in `site-cookbooks/munin/files/default/plugins`. Call the
 definition specifying that the plugin file should be downloaded from
 the cookbook.
 
-    munin_plugin "nfs_client_custom"
-      create_file true
-    end
+```ruby
+munin_plugin "nfs_client_custom"
+  create_file true
+end
+```
 
 By default in both cases, the plugin is enabled. If a plugin should be
 disabled, use the `enable` parameter
 
-    munin_plugin "nfs_client_custom"
-      enable false
-    end
+```ruby
+munin_plugin "nfs_client_custom"
+  enable false
+end
+```
 
 Some plugins may require other configuration. For example, to use the
 memcache plugins, you'll need the `Cache::Memcache` cpan module
 installed, and use the `munin_plugin` definition. The perl cookbook
 from opscode includes a definition to handle this easily.
 
-    cpan_module "Cache::Memcached"
+```ruby
+cpan_module "Cache::Memcached"
+```
 
 Then for example in your memcache recipe
 
-    %w(
-      memcached_bytes_
-      memcached_connections_
-      memcached_hits_
-      memcached_items_
-      memcached_requests_
-      memcached_responsetime_
-      memcached_traffic_
-    ).each do |plugin_name|
-      munin_plugin plugin_name do
-        plugin "#{plugin_name}#{node[:ipaddress].gsub('.','_')}_#{node[:memcached][:port]}"
-        create_file true
-      end
-    end
+```ruby
+%w(
+  memcached_bytes_
+  memcached_connections_
+  memcached_hits_
+  memcached_items_
+  memcached_requests_
+  memcached_responsetime_
+  memcached_traffic_
+).each do |plugin_name|
+  munin_plugin plugin_name do
+    plugin "#{plugin_name}#{node[:ipaddress].gsub('.','_')}_#{node[:memcached][:port]}"
+    create_file true
+  end
+end
+```
 
 License and Author
 ==================
