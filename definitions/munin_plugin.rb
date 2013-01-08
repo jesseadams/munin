@@ -18,6 +18,7 @@
 #
 
 
+
 define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'munin' do
 
   include_recipe "munin::client"
@@ -25,6 +26,8 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
   plugin = params[:plugin] ? params[:plugin] : params[:name]
   plugin_config = params[:plugin_config] ? params[:plugin_config] : node['munin']['plugins']
   plugin_dir = params[:plugin_dir] ? params[:plugin_dir] : node['munin']['plugin_dir']
+
+  service_name = params[:service_name] ? params[:service_name] : node['munin']['service_name']
 
   if params[:create_file]
     cookbook_file "#{plugin_dir}/#{params[:name]}" do
@@ -43,7 +46,7 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
     else
       action :delete
     end
-    notifies :restart, resources(:service => "munin-node")
+    notifies :restart, resources(:service => service_name)
   end
 
 end
