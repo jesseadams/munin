@@ -17,16 +17,16 @@
 # limitations under the License.
 #
 
-web_srv = node[:munin][:web_server].to_sym
+web_srv = node['munin']['web_server'].to_sym
 case web_srv
 when :apache
   include_recipe 'munin::server_apache'
-  web_user = node[:apache][:user]
-  web_group = node[:apache][:group]
+  web_user = node['apache']['user']
+  web_group = node['apache']['group']
 when :nginx
   include_recipe 'munin::server_nginx'
-  web_user = node[:nginx][:user]
-  web_group = node[:nginx][:group]
+  web_user = node['nginx']['user']
+  web_group = node['nginx']['group']
 else
   raise "Unsupported web server type provided for munin. Supported: apache or nginx"
 end
@@ -43,25 +43,25 @@ end
 
 munin_servers.sort! { |a,b| a[:fqdn] <=> b[:fqdn] }
 
-if node[:public_domain]
+if node['public_domain']
   case node.chef_environment
   when "production"
-    public_domain = node[:public_domain]
+    public_domain = node['public_domain']
   else
-    public_domain = "#{node.chef_environment}.#{node[:public_domain]}"
+    public_domain = "#{node.chef_environment}.#{node['public_domain']}"
   end
 else
-  public_domain = node[:domain]
+  public_domain = node['domain']
 end
 
-case node[:platform]
+case node['platform']
 when "freebsd"
   package "munin-master"
 else
   package "munin"
 end
 
-case node[:platform]
+case node['platform']
 when "arch"
   cron "munin-graph-html" do
     command "/usr/bin/munin-cron"

@@ -24,7 +24,7 @@ default['munin']['server_auth_method'] = 'openid'
 default['munin']['web_server'] = 'apache'
 default['munin']['web_server_port'] = 80
 
-case node[:platform]
+case node['platform']
 when "arch"
   default['munin']['basedir'] = "/etc/munin"
   default['munin']['plugin_dir'] = "/usr/share/munin/plugins"
