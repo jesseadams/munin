@@ -11,17 +11,17 @@ include_recipe "nginx"
   end
 end
 
-munin_conf = File.join(node[:nginx][:dir], 'sites-available', 'munin.conf')
+munin_conf = File.join(node['nginx']['dir'], 'sites-available', 'munin.conf')
 
-if node[:public_domain]
+if node['public_domain']
   case node.chef_environment
   when "production"
-    public_domain = node[:public_domain]
+    public_domain = node['public_domain']
   else
-    public_domain = "#{node.chef_environment}.#{node[:public_domain]}"
+    public_domain = "#{node.chef_environment}.#{node['public_domain']}"
   end
 else
-  public_domain = node[:domain]
+  public_domain = node['domain']
 end
 
 template munin_conf do
