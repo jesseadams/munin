@@ -2,31 +2,26 @@ Description
 ===========
 
 Installs and configures Munin for a server and for clients using Chef
-0.8 search capabilities.
+Server search capabilities.
 
 Requirements
 ============
 
-Requires Chef 0.10 for Chef environments.
+Requires Chef 0.10.0+ for Chef environments. Requires a Chef Server
+for performing node searches.
 
 The monitoring server that uses this recipe should have a role named
-'monitoring'. The recipes use search, and narrow the results to nodes
-in the same `chef_environment`.
+'`monitoring`'. This is configurable with an attribute (see below). The
+recipes use search, and narrow the results to nodes in the same
+`chef_environment`.
 
-Because of the heavy use of search, this recipe will not work with
-Chef Solo, as it cannot do any searches without a server.
-
-Platform
---------
+## Platform
 
 * Debian/Ubuntu
 * Red Hat 5.7, 6.1
 * ArchLinux
 
-Cookbooks
----------
-
-Opscode cookbooks
+## Cookbooks
 
 * apache2
 
@@ -39,7 +34,6 @@ Authentication__, below).
 Not required, but recommended to install perl cpan modules for munin plugins
 
 * perl
-
 * nginx
 
 Attributes
@@ -70,16 +64,14 @@ Attributes
 Recipes
 =======
 
-client
-------
+## client
 
 The client recipe installs munin-node package and starts the service.
 It also searches for a node with the role for the munin server, by
 default `node['munin']['server_role']`. On Archlinux, it builds the
 list of plugins to enable.
 
-server
-------
+## server
 
 The server recipe will set up the munin server with Apache. It will
 create a cron job for generating the munin graphs, search for any
@@ -150,8 +142,7 @@ the `node['munin']['server_role']` attribute in the same environment.
 If you don't use `monitoring` as the role name, change it in a role
 that is applied to any nodes that get the `munin::client` recipe.
 
-OpenID Authentication
----------------------
+## OpenID Authentication
 
 The recipe `apache2::mod_auth_openid` is updated to a version of the
 module that apparently does not support the `AuthOpenIDUserProgram`
@@ -161,8 +152,7 @@ Apache HTTPD `require user` directive, with a concatenated list from
 OpenIDs. Use of the `users::sysadmins` recipe will set this up based
 on data bag search results.
 
-Custom Plugins
---------------
+## Custom Plugins
 
 This section describes how to add custom munin plugins.
 
@@ -231,7 +221,7 @@ License and Author
 - Author:: Nathan Haneysmith <nathan@opscode.com>
 - Author:: Joshua Timberman <joshua@opscode.com>
 
-- Copyright 2009-2012, Opscode, Inc
+- Copyright 2009-2013, Opscode, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

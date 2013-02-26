@@ -1,3 +1,11 @@
+## v1.2.0:
+
+* [COOK-2103] - Name the munin-hosts by fqdn instead of pure hostname
+* [COOK-2182] - FC043 - prefer new notification syntax in munin
+  cookbook
+* [COOK-2137] - SmartOS support for Munin
+* [COOK-2140] - nginx template server_name incorrect
+
 ## v1.1.2:
 
 * [COOK-1600] - add an attribute for setting the listen port.
