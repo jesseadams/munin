@@ -17,7 +17,11 @@
 # limitations under the License.
 #
 
-munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+if node['munin']['multi_environment_monitoring']
+  munin_servers = search(:node, "role:#{node['munin']['server_role']}")
+else  
+  munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+end
 
 package "munin-node"
 
