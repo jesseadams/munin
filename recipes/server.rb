@@ -24,7 +24,7 @@ unless node['munin']['public_domain']
       public_domain = node['public_domain']
     else
       if node['munin']['multi_environment_monitoring']
-        public_domain = "#{node['public_domain']}"
+        public_domain = node['public_domain']
       else
         env = node.chef_environment =~ /_default/ ? "default" : node.chef_environment
         public_domain = "#{env}.#{node['public_domain']}"
