@@ -1,3 +1,9 @@
+## v1.3.2:
+
+### Bug
+
+- [COOK-2965]: munin cookbook has foodcritic failures
+
 ## v1.3.0:
 
 * [COOK-2518] - Multi Environment
