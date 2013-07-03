@@ -7,22 +7,26 @@
   CustomLog       <%= node['apache']['log_dir'] %>/munin_access.log combined
   ErrorLog        <%= node['apache']['log_dir'] %>/munin_error.log
 
+  <Location />
 <% case node['munin']['server_auth_method'] -%>
 <% when "openid" -%>
-  <Location />
     AuthName "Munin Server"
     AuthType OpenID
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
-  </Location>
+<% when "whitelist" -%>
+    order deny,allow
+    <% @whitelist_ips.each do |ip| %>
+    allow from <%= ip %>
+    <% end %>
+    deny from all
 <% else -%>
-  <Location />
     AuthName "Munin Server"
     AuthType Basic
     AuthUserFile "<%= node['munin']['basedir'] %>/htpasswd.users"
     require valid-user
-  </Location>
 <% end -%>
+  </Location>
 
   RewriteEngine On
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/

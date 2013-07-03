@@ -21,6 +21,7 @@ default['munin']['sysadmin_email'] = "ops@example.com"
 default['munin']['server_role'] = 'monitoring'
 default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
+default['munin']['whitelist_ips'] = []
 
 default['munin']['web_server'] = 'apache'
 default['munin']['web_server_port'] = 80

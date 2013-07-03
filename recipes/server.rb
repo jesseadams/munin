@@ -110,6 +110,8 @@ when "openid"
   else
     raise "OpenID is unsupported on non-apache installs"
   end
+when "whitelist"
+  # Nothing to do
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source "htpasswd.users.erb"
@@ -126,5 +128,6 @@ directory node['munin']['docroot'] do
   owner "munin"
   group "munin"
   mode 0755
+  recursive true
 end
 
