@@ -1,17 +1,25 @@
 server {
   
   listen <%= @listen_port %>;
-  server_name munin <%= @public_domain %> <%= @fqdn %>;
+  server_name munin <%= @public_domain %>
   access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
   error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
 
   location /munin {
-    root <%= @docroot %>;
+    alias <%= @docroot %>;
   }
   
   location / {
+<% case node['munin']['server_auth_method'] -%>
+<% when "whitelist" -%>
+  <% @whitelist_ips.each do |ip | %>
+    allow <%= ip %>; 
+  <% end %>
+    deny all;
+<% else -%>
     auth_basic "Munin Server";
     auth_basic_user_file <%= @htpasswd_file %>;
+<% end -%>
     root <%= @docroot %>;
   }
 }

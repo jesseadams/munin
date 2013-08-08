@@ -10,7 +10,12 @@ end
 template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source "apache2.conf.erb"
   mode 0644
-  variables(:public_domain => node['munin']['public_domain'], :docroot => node['munin']['docroot'], :listen_port => node['munin']['web_server_port'])
+  variables(
+    :public_domain => node['munin']['public_domain'],
+    :docroot => node['munin']['docroot'],
+    :listen_port => node['munin']['web_server_port'],
+    :whitelist_ips => node['munin']['whitelist_ips']
+  )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, "service[apache2]"
   end

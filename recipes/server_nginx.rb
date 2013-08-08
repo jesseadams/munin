@@ -21,7 +21,8 @@ template munin_conf do
     :docroot => node['munin']['docroot'],
     :log_dir => node['nginx']['log_dir'],
     :listen_port => node['munin']['web_server_port'],
-    :htpasswd_file => File.join(node['munin']['basedir'], 'htpasswd.users')
+    :htpasswd_file => File.join(node['munin']['basedir'], 'htpasswd.users'),
+    :whitelist_ips => node['munin']['whitelist_ips']
   )
   if(::File.symlink?(munin_conf))
     notifies :reload, 'service[nginx]'

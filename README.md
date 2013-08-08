@@ -44,8 +44,11 @@ Attributes
 * `node['munin']['sysadmin_email']` - default email address for
   serveradmin in vhost.
 * `node['munin']['server_auth_method']` - the authentication method to
-  use, default is openid. Any other value will use htauth basic with
-  an htpasswd file.
+  use, default is openid. Another option is whitelist which will only
+  allow clients from certain ip addresses. Any other value will use
+  htaccess basic auth with an htpasswd file.
+* `node['munin']['whitelist_ips']` - the array of ip addresses that will
+  be whitelisted if `node['munin']['server_auth_method'] == 'whitelist'`
 * `node['munin']['multi_environment_monitoring']` - allow 
    multi-environment monitoring.  Default is false.
 * `node['munin']['server_role']` - role of the munin server. Default
@@ -154,6 +157,11 @@ Apache HTTPD `require user` directive, with a concatenated list from
 `node['apache']['allowed_openids']`. This value must be an array of
 OpenIDs. Use of the `users::sysadmins` recipe will set this up based
 on data bag search results.
+
+## Whitelist Authentication
+
+This option will only allow users from a specified array of ip
+addresses access the virtual host.
 
 ## Custom Plugins
 
