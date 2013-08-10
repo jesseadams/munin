@@ -1,10 +1,21 @@
+## v1.3.2:
+
+### Bug
+
+- [COOK-2965]: munin cookbook has foodcritic failures
+
+## v1.3.0:
+
+* [COOK-2518] - Multi Environment
+* [COOK-2662] - `munin::server_apache2` fatal due to attribute precendence
+
 ## v1.2.0:
 
 * [COOK-2103] - Name the munin-hosts by fqdn instead of pure hostname
 * [COOK-2182] - FC043 - prefer new notification syntax in munin
   cookbook
 * [COOK-2137] - SmartOS support for Munin
-* [COOK-2140] - nginx template server_name incorrect
+* [COOK-2140] - nginx template `server_name` incorrect
 
 ## v1.1.2:
 
