@@ -13,7 +13,7 @@ server {
   location ^~ /cgi-bin/munin-cgi-graph/ {
     fastcgi_split_path_info ^(/cgi-bin/munin-cgi-graph)(.*);
     fastcgi_param PATH_INFO $fastcgi_path_info;
-    fastcgi_pass unix:/var/run/munin/fastcgi-graph.sock;
+    fastcgi_pass <%= node['munin']['nginx_graph_fastcgi_address'] %>;
     include fastcgi_params;
   }
 
@@ -24,7 +24,7 @@ server {
   location / {
     fastcgi_split_path_info ^(/)(.*);
     fastcgi_param PATH_INFO $fastcgi_path_info;
-    fastcgi_pass unix:/var/run/munin/fastcgi-html.sock;
+    fastcgi_pass <%= node['munin']['nginx_html_fastcgi_address'] %>;
     include fastcgi_params;
   }
 
