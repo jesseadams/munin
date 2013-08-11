@@ -57,7 +57,7 @@ if Chef::Config[:solo]
   users = data_bag('users')
   users.each do |user_info|
     user = data_bag_item('users', user_info)
-    sysadmins += user
+    sysadmins << user
   end
 else
   sysadmins = search(:users, 'groups:sysadmin')
