@@ -20,7 +20,7 @@ template munin_conf do
     :listen_port => node['munin']['web_server_port'],
     :htpasswd_file => File.join(node['munin']['basedir'], 'htpasswd.users')
   )
-  if(::File.symlink?(munin_conf))
+  if(::File.exist?(munin_conf))
     notifies :reload, 'service[nginx]'
   end
 end
