@@ -28,7 +28,7 @@ end
 
 case node['platform_family']
 when "debian"
-  template "/etc/init/munin-node" do
+  template "/etc/init/munin-node.conf" do
     source "munin-init-upstart.erb"
     mode "0644"
     owner "root"
