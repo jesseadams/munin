@@ -66,35 +66,39 @@ end
 
 munin_servers.sort! { |a,b| a[:fqdn] <=> b[:fqdn] }
 
-case node['platform']
-when "freebsd"
-  package "munin-master"
-else
-  package "munin"
-end
+if node['munin']['install_method'] == 'package'
+  case node['platform']
+  when "freebsd"
+    package "munin-master"
+  else
+    package "munin"
+  end
 
-case node['platform']
-when "arch"
-  cron "munin-graph-html" do
-    command "/usr/bin/munin-cron"
-    user "munin"
-    minute "*/5"
+  case node['platform']
+  when "arch"
+    cron "munin-graph-html" do
+      command "/usr/bin/munin-cron"
+      user "munin"
+      minute "*/5"
+    end
+  when "freebsd"
+    cron "munin-graph-html" do
+      command "/usr/local/bin/munin-cron"
+      user "munin"
+      minute "*/5"
+      ignore_failure true
+    end
+  else
+    cookbook_file "/etc/cron.d/munin" do
+      source "munin-cron"
+      mode "0644"
+      owner "root"
+      group node['munin']['root']['group']
+      backup 0
+    end
   end
-when "freebsd"
-  cron "munin-graph-html" do
-    command "/usr/local/bin/munin-cron"
-    user "munin"
-    minute "*/5"
-    ignore_failure true
-  end
-else
-  cookbook_file "/etc/cron.d/munin" do
-    source "munin-cron"
-    mode "0644"
-    owner "root"
-    group node['munin']['root']['group']
-    backup 0
-  end
+elsif node['munin']['install_method'] == "source"
+  include_recipe "munin::source_server"
 end
 
 template "#{node['munin']['basedir']}/munin.conf" do

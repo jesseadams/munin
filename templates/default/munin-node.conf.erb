@@ -3,7 +3,7 @@
 ###
 
 log_level 4
-log_file /var/log/munin/munin-node.log
+log_file <%= node['munin']['log_dir'] %>/munin-node.log
 port 4949
 pid_file /var/run/munin/munin-node.pid
 background 1
