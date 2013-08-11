@@ -3,8 +3,8 @@ server {
   listen <%= @listen_port %>;
   server_name munin <%= @public_domain %> <%= @fqdn %>;
 
-  access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
-  error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
+  access_log <%= File.join(@log_dir, 'munin_access.log') %>;
+  error_log <%= File.join(@log_dir, 'munin_error.log') %>;
 
   auth_basic "Munin Server";
   auth_basic_user_file <%= @htpasswd_file %>;
