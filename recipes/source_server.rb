@@ -1,4 +1,3 @@
-include_attribute "munin::source"
 
 src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/munin-#{node['munin']['source']['version']}.tar.gz"
 

@@ -1,3 +1,4 @@
+include_attribute "munin"
 
 default['munin']['install_dir'] = "/opt/munin"
 default['munin']['basedir'] = "/etc/opt/munin"
