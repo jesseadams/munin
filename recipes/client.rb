@@ -27,7 +27,12 @@ else
   end
 end
 
-package "munin-node"
+
+if node['munin']['install_method'] == 'package'
+  package "munin-node"
+elsif node['munin']['install_method'] == "source"
+  include_recipe "munin::source_client"
+end
 
 service_name = node['munin']['service_name']
 
