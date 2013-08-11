@@ -55,7 +55,9 @@ Attributes
   `/var/www/munin` on other platforms.
 * `node['munin']['web_server']` - supports apache or nginx, default is
   "apache"
-* `node['munin']['nginx_fastcgi_support']` - provides fast-cgi graphs config section for "nginx" web_server
+* `node['munin']['nginx_fastcgi_support']` - provides fast-cgi graphs config section for "nginx" web_server. Default false.
+* `node['munin']['nginx_graph_fastcgi_address']` = fastcgi_pass address for nginx graph support
+* `node['munin']['nginx_html_fastcgi_address']` = fastcgi_pass address for nginx html support
 * `node['munin']['public_domain']` - override munin domain.
 * `node['munin']['max_processes']` - Maximum number of simultaneous
   Munin-update processes. When not set, munin will use as many as

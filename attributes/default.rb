@@ -34,7 +34,7 @@ when "arch"
   default['munin']['dbdir'] = "/var/lib/munin"
   default['munin']['root']['group'] = "root"
   default['munin']['service_name'] = "munin-node"
-when "centos","redhat","fedora","amazon"
+when "centos","redhat","fedora","amazon", "scientific"
   default['munin']['basedir'] = "/etc/munin"
   default['munin']['plugin_dir'] = "/usr/share/munin/plugins"
   default['munin']['docroot'] = "/var/www/html/munin"
@@ -69,3 +69,7 @@ default['munin']['tmpldir'] = "#{default['munin']['basedir']}/templates"
 default['munin']['max_graph_jobs'] = "6"
 default['munin']['max_cgi_graph_jobs'] = "6"
 default['munin']['max_processes'] = nil # use as many as necessary
+
+default['munin']['nginx_fastcgi_support'] = false
+default['munin']['nginx_graph_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-graph.sock'
+default['munin']['nginx_html_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-html.sock'

@@ -9,20 +9,34 @@ server {
   auth_basic "Munin Server";
   auth_basic_user_file <%= @htpasswd_file %>;
 
-  location /munin {
-    root <%= @docroot %>;
-  }
-
   <% if @nginx_fastcgi_support %>
   location ^~ /cgi-bin/munin-cgi-graph/ {
     fastcgi_split_path_info ^(/cgi-bin/munin-cgi-graph)(.*);
     fastcgi_param PATH_INFO $fastcgi_path_info;
-    fastcgi_pass unix:/var/run/munin/fastcgi-graph.sock;
+    fastcgi_pass <%= node['munin']['nginx_graph_fastcgi_address'] %>;
     include fastcgi_params;
   }
-  <% end %>
+
+  location ~* ^/static {
+    root <%= node['munin']['basedir'] %>;
+  }
+
+  location / {
+    fastcgi_split_path_info ^(/)(.*);
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_pass <%= node['munin']['nginx_html_fastcgi_address'] %>;
+    include fastcgi_params;
+  }
+
+  <% else %>
+
+  location /munin {
+    root <%= @docroot %>;
+  }
 
   location / {
     root <%= @docroot %>;
   }
+
+  <% end %>
 }
