@@ -26,22 +26,10 @@ bash "compile_munin_source" do
   end
 end
 
-case node['platform_family']
-when "debian"
-  template "/etc/init/munin-node.conf" do
-    source "munin-init-upstart.erb"
-    mode "0644"
-    owner "root"
-    group node['munin']['root']['group']
-    backup 0
-  end
-else
-  template "/etc/init.d/munin-node" do
-    source "munin-init-sysv.erb"
-    mode "0644"
-    owner "root"
-    group node['munin']['root']['group']
-    backup 0
-  end
+template "/etc/init.d/munin-node" do
+  source "munin-init-sysv.erb"
+  mode "0755"
+  owner "root"
+  group node['munin']['root']['group']
+  backup 0
 end
-  
