@@ -43,6 +43,7 @@ Not required, but recommended to install perl cpan modules for munin plugins
 Attributes
 ==========
 
+* `node['munin']['install_method']` - package (default) or source for source installs 
 * `node['munin']['web_server_port']` - port that the munin vhost runs
   on, default 80
 * `node['munin']['sysadmin_email']` - default email address for
@@ -121,6 +122,11 @@ The htpasswd must be the hashed value. Get this value with htpasswd:
     nagiosadmin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
 
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
+
+Source installs
+===============
+
+There is a way to install latest version of Munin from source. Just set node['munin']['install_method'] to source and adjust source attributes. 
 
 Usage
 =====
