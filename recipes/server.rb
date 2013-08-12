@@ -50,8 +50,6 @@ else
   raise "Unsupported web server type provided for munin. Supported: apache or nginx"
 end
 
-include_recipe "munin::client"
-
 sysadmins = search(:users, 'groups:sysadmin')
 if node['munin']['multi_environment_monitoring']
   munin_servers = search(:node, "munin:[* TO *]")
@@ -100,6 +98,8 @@ if node['munin']['install_method'] == 'package'
 elsif node['munin']['install_method'] == "source"
   include_recipe "munin::source_server"
 end
+
+include_recipe "munin::client"
 
 template "#{node['munin']['basedir']}/munin.conf" do
   source "munin.conf.erb"
