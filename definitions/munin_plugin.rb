@@ -23,9 +23,17 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
 
   include_recipe "munin::client"
 
+  if node['munin']['install_method'] == 'source'
+    attr_plugin_config = node['munin']['source']['plugins']
+    attr_plugin_dir = node['munin']['source']['plugin_dir']
+  else
+    attr_plugin_config = node['munin']['plugins']
+    attr_plugin_dir = node['munin']['plugin_dir']
+  end
+
   plugin = params[:plugin] ? params[:plugin] : params[:name]
-  plugin_config = params[:plugin_config] ? params[:plugin_config] : node['munin']['plugins']
-  plugin_dir = params[:plugin_dir] ? params[:plugin_dir] : node['munin']['plugin_dir']
+  plugin_config = params[:plugin_config] ? params[:plugin_config] : attr_plugin_config
+  plugin_dir = params[:plugin_dir] ? params[:plugin_dir] : attr_plugin_dir
 
   service_name = params[:service_name] ? params[:service_name] : node['munin']['service_name']
 
