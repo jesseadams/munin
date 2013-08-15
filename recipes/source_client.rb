@@ -1,5 +1,7 @@
 include_recipe "munin::source_common"
 
+src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/munin-#{node['munin']['source']['version']}.tar.gz"
+
 bash "compile_munin_source" do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
