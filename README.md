@@ -7,10 +7,14 @@ Server search capabilities.
 Requirements
 ============
 
-Requires Chef 0.10.0+ for Chef environments. Requires a Chef Server
-for performing node searches.
+Requires Chef 0.10.0+ for Chef environments. Supports both chef-solo and chef-client ( with node searches support ).
 
-The monitoring server that uses this recipe should have a role named
+Chef-solo:
+* If you have data bag called users all items within will be sarched and used to populate htpasswd file. Make sure you provide htpasswd field for user you want to have access to munin interface.
+* Since there is no search support for chef-solo, current node object will be used instead.
+
+Chef-client:
+* The monitoring server that uses this recipe should have a role named
 '`monitoring`'. This is configurable with an attribute (see below). The
 recipes use search, and narrow the results to nodes in the same
 `chef_environment`.
@@ -39,6 +43,7 @@ Not required, but recommended to install perl cpan modules for munin plugins
 Attributes
 ==========
 
+* `node['munin']['install_method']` - package (default) or source for source installs 
 * `node['munin']['web_server_port']` - port that the munin vhost runs
   on, default 80
 * `node['munin']['sysadmin_email']` - default email address for
@@ -55,6 +60,9 @@ Attributes
   `/var/www/munin` on other platforms.
 * `node['munin']['web_server']` - supports apache or nginx, default is
   "apache"
+* `node['munin']['nginx_fastcgi_support']` - provides fast-cgi graphs config section for "nginx" web_server. Default false.
+* `node['munin']['nginx_graph_fastcgi_address']` = fastcgi_pass address for nginx graph support
+* `node['munin']['nginx_html_fastcgi_address']` = fastcgi_pass address for nginx html support
 * `node['munin']['public_domain']` - override munin domain.
 * `node['munin']['max_processes']` - Maximum number of simultaneous
   Munin-update processes. When not set, munin will use as many as
@@ -115,6 +123,11 @@ The htpasswd must be the hashed value. Get this value with htpasswd:
 
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 
+Source installs
+===============
+
+There is a way to install latest version of Munin from source. Just set node['munin']['install_method'] to source and adjust source attributes. 
+
 Usage
 =====
 
@@ -140,7 +153,7 @@ environment Ruby DSL file and upload it to the Chef Server
     description "Nodes in production"
     % knife environment from file production.rb
 
-Clients will automatically search for the server based on the value of
+For chef-client mode clients will automatically search for the server based on the value of
 the `node['munin']['server_role']` attribute in the same environment.
 If you don't use `monitoring` as the role name, change it in a role
 that is applied to any nodes that get the `munin::client` recipe.

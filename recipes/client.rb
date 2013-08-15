@@ -17,32 +17,51 @@
 # limitations under the License.
 #
 
-if node['munin']['multi_environment_monitoring']
-  munin_servers = search(:node, "role:#{node['munin']['server_role']}")
-else  
-  munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+if Chef::Config[:solo]
+  munin_servers = [node]
+else
+  if node['munin']['multi_environment_monitoring']
+    munin_servers = search(:node, "role:#{node['munin']['server_role']}")
+  else  
+    munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+  end
 end
 
-package "munin-node"
-
 service_name = node['munin']['service_name']
+
+if node['munin']['install_method'] == 'package'
+  package "munin-node"
+
+  basedir = node['munin']['basedir']
+  log_dir = node['munin']['log_dir']
+  plugins_dir = node['munin']['plugins_dir']
+elsif node['munin']['install_method'] == "source"
+  include_recipe "munin::source_client"
+
+  basedir = node['munin']['source']['basedir']
+  log_dir = node['munin']['source']['log_dir']
+  plugins_dir = node['munin']['source']['plugins_dir']
+end
+
+template "#{basedir}/munin-node.conf" do
+  source "munin-node.conf.erb"
+  mode 0644
+  variables(
+    :munin_servers => munin_servers,
+    :log_dir => log_dir
+  )
+  notifies :restart, "service[#{service_name}]"
+end
 
 service service_name do
   supports :restart => true
   action :enable
 end
 
-template "#{node['munin']['basedir']}/munin-node.conf" do
-  source "munin-node.conf.erb"
-  mode 0644
-  variables :munin_servers => munin_servers
-  notifies :restart, "service[#{service_name}]"
-end
-
 case node['platform']
 when "arch", "smartos"
   execute "munin-node-configure --shell | sh" do
-    not_if { Dir.entries(node['munin']['plugins']).length > 2 }
+    not_if { Dir.entries(plugins_dir).length > 2 }
     notifies :restart, "service[#{service_name}]"
   end
 end

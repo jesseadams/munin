@@ -1,17 +1,22 @@
 # The next three variables specifies where the location of the RRD
 # databases, the HTML output, and the logs, severally.  They all
 # must be writable by the user running munin-cron.
-dbdir   <%= node['munin']['dbdir'] %>
+dbdir   <%= @dbdir %>
 htmldir <%= @docroot %>
-logdir  /var/log/munin
+logdir  <%= @logdir %>
 rundir  /var/run/munin
+
+<% if node['munin']['cgi_mode'] %>
+  html_strategy cgi
+  graph_strategy cgi
+<% end %>
 
 <% node['munin']['contacts'].each do |kind, command| %>
 contact.<%= kind %>.contact  <%= command %>
 <% end if node['munin']['contacts'] %>
 
 # Where to look for the HTML templates
-tmpldir <%= node['munin']['tmpldir'] %>
+tmpldir <%= @tmpldir %>
 
 <% if node['munin']['max_processes'] %>
 max_processes <%= node['munin']['max_processes'] %>

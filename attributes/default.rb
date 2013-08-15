@@ -26,6 +26,8 @@ default['munin']['web_server'] = 'apache'
 default['munin']['web_server_port'] = 80
 default['munin']['public_domain'] = nil
 
+default['munin']['install_method'] = 'package'
+
 case node['platform']
 when "arch"
   default['munin']['basedir'] = "/etc/munin"
@@ -64,8 +66,15 @@ else
   default['munin']['service_name'] = "munin-node"
 end
 
+default['munin']['cgi_mode'] = false
 default['munin']['plugins'] = "#{default['munin']['basedir']}/plugins"
 default['munin']['tmpldir'] = "#{default['munin']['basedir']}/templates"
+default['munin']['static_dir'] = "#{default['munin']['static_dir']}/static"
+default['munin']['log_dir'] = "/var/log/munin"
 default['munin']['max_graph_jobs'] = "6"
 default['munin']['max_cgi_graph_jobs'] = "6"
 default['munin']['max_processes'] = nil # use as many as necessary
+
+default['munin']['nginx_fastcgi_support'] = false
+default['munin']['nginx_graph_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-graph.sock'
+default['munin']['nginx_html_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-html.sock'

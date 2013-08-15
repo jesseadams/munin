@@ -50,14 +50,27 @@ else
   raise "Unsupported web server type provided for munin. Supported: apache or nginx"
 end
 
-include_recipe "munin::client"
-
-sysadmins = search(:users, 'groups:sysadmin')
-if node['munin']['multi_environment_monitoring']
-  munin_servers = search(:node, "munin:[* TO *]")
-else  
-  munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+sysadmins = []
+if Chef::Config[:solo]
+  users = data_bag('users')
+  users.each do |user_info|
+    user = data_bag_item('users', user_info)
+    sysadmins << user
+  end
+else
+  sysadmins = search(:users, 'groups:sysadmin')
 end
+
+if Chef::Config[:solo]
+  munin_servers = [node]
+else
+  if node['munin']['multi_environment_monitoring']
+    munin_servers = search(:node, "munin:[* TO *]")
+  else  
+    munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+  end
+end
+
 if munin_servers.empty?
   Chef::Log.info("No nodes returned from search, using this node so munin configuration has data")
   munin_servers = Array.new
@@ -66,42 +79,76 @@ end
 
 munin_servers.sort! { |a,b| a[:fqdn] <=> b[:fqdn] }
 
-case node['platform']
-when "freebsd"
-  package "munin-master"
-else
-  package "munin"
+if node['munin']['install_method'] == 'package'
+  case node['platform']
+  when "freebsd"
+    package "munin-master"
+  else
+    package "munin"
+  end
+
+  case node['platform']
+  when "arch"
+    cron "munin-graph-html" do
+      command "/usr/bin/munin-cron"
+      user "munin"
+      minute "*/5"
+    end
+  when "freebsd"
+    cron "munin-graph-html" do
+      command "/usr/local/bin/munin-cron"
+      user "munin"
+      minute "*/5"
+      ignore_failure true
+    end
+  else
+    cookbook_file "/etc/cron.d/munin" do
+      source "munin-cron"
+      mode "0644"
+      owner "root"
+      group node['munin']['root']['group']
+      backup 0
+    end
+  end
+
+  template "#{node['munin']['basedir']}/munin.conf" do
+    source "munin.conf.erb"
+    mode 0644
+    variables({
+      :munin_nodes => munin_servers,
+      :docroot => node['munin']['docroot'],
+      :dbdir => node['munin']['dbdir'],
+      :logdir => node['munin']['log_dir'],
+      :tmpldir => node['munin']['tmpldir']
+    })
+  end
+  
+  directory node['munin']['docroot'] do
+    owner "munin"
+    group "munin"
+    mode 0755
+  end
+
+elsif node['munin']['install_method'] == "source"
+
+  include_recipe "munin::source_server"
+
+  template "#{node['munin']['source']['basedir']}/munin.conf" do
+    source "munin.conf.erb"
+    mode 0644
+    variables({
+      :munin_nodes => munin_servers,
+      :docroot => node['munin']['source']['docroot'],
+      :dbdir => node['munin']['source']['dbdir'],
+      :logdir => node['munin']['source']['log_dir'],
+      :tmpldir => node['munin']['source']['tmpldir']
+    })
+  end
+
 end
 
-case node['platform']
-when "arch"
-  cron "munin-graph-html" do
-    command "/usr/bin/munin-cron"
-    user "munin"
-    minute "*/5"
-  end
-when "freebsd"
-  cron "munin-graph-html" do
-    command "/usr/local/bin/munin-cron"
-    user "munin"
-    minute "*/5"
-    ignore_failure true
-  end
-else
-  cookbook_file "/etc/cron.d/munin" do
-    source "munin-cron"
-    mode "0644"
-    owner "root"
-    group node['munin']['root']['group']
-    backup 0
-  end
-end
+include_recipe "munin::client"
 
-template "#{node['munin']['basedir']}/munin.conf" do
-  source "munin.conf.erb"
-  mode 0644
-  variables(:munin_nodes => munin_servers, :docroot => node['munin']['docroot'])
-end
 
 case node['munin']['server_auth_method']
 when "openid"
@@ -111,7 +158,14 @@ when "openid"
     raise "OpenID is unsupported on non-apache installs"
   end
 else
-  template "#{node['munin']['basedir']}/htpasswd.users" do
+
+  if node['munin']['install_method'] == "source"
+    htpasswd_path = "#{node['munin']['source']['basedir']}/htpasswd.users"
+  else
+    htpasswd_path = "#{node['munin']['basedir']}/htpasswd.users"
+  end
+
+  template "#{htpasswd_path}" do
     source "htpasswd.users.erb"
     owner "munin"
     group web_group 
@@ -120,11 +174,5 @@ else
       :sysadmins => sysadmins
     )
   end
-end
-
-directory node['munin']['docroot'] do
-  owner "munin"
-  group "munin"
-  mode 0755
 end
 
