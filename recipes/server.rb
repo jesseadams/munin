@@ -110,17 +110,45 @@ if node['munin']['install_method'] == 'package'
       backup 0
     end
   end
+
+  template "#{node['munin']['basedir']}/munin.conf" do
+    source "munin.conf.erb"
+    mode 0644
+    variables({
+      :munin_nodes => munin_servers,
+      :docroot => node['munin']['docroot'],
+      :dbdir => node['munin']['dbdir'],
+      :logdir => node['munin']['log_dir'],
+      :tmpldir => node['munin']['tmpldir']
+    })
+  end
+  
+  directory node['munin']['docroot'] do
+    owner "munin"
+    group "munin"
+    mode 0755
+  end
+
 elsif node['munin']['install_method'] == "source"
+
   include_recipe "munin::source_server"
+
+  template "#{node['munin']['source']['basedir']}/munin.conf" do
+    source "munin.conf.erb"
+    mode 0644
+    variables({
+      :munin_nodes => munin_servers,
+      :docroot => node['munin']['source']['docroot'],
+      :dbdir => node['munin']['source']['dbdir'],
+      :logdir => node['munin']['source']['log_dir'],
+      :tmpldir => node['munin']['source']['tmpldir']
+    })
+  end
+
 end
 
 include_recipe "munin::client"
 
-template "#{node['munin']['basedir']}/munin.conf" do
-  source "munin.conf.erb"
-  mode 0644
-  variables(:munin_nodes => munin_servers, :docroot => node['munin']['docroot'])
-end
 
 case node['munin']['server_auth_method']
 when "openid"
@@ -139,11 +167,5 @@ else
       :sysadmins => sysadmins
     )
   end
-end
-
-directory node['munin']['docroot'] do
-  owner "munin"
-  group "munin"
-  mode 0755
 end
 
