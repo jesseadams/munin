@@ -18,5 +18,9 @@ template "/etc/init.d/munin-node" do
   mode "0755"
   owner "root"
   group node['munin']['root']['group']
+  variables(
+    :sbin_dir => node['munin']['source']['sbin_dir'],
+    :basedir => node['munin']['source']['basedir']
+  )
   backup 0
 end

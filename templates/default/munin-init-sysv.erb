@@ -12,9 +12,9 @@
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=<%= node['munin']['sbin_dir'] %>/munin-node
+DAEMON=<%= @sbin_dir %>/munin-node
 PIDFILE=/var/run/munin/munin-node.pid
-CONFFILE=<%= node['munin']['basedir'] %>/munin-node.conf
+CONFFILE=<%= @basedir %>/munin-node.conf
 
 is_running () {
         if [ ! -e "$PIDFILE" ]; then

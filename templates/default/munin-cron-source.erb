@@ -3,4 +3,4 @@
 
 MAILTO=root
 
-*/5 * * * *     munin if [ -x <%= node['munin']['bin_dir'] %>/munin-cron ]; then <%= node['munin']['bin_dir'] %>/munin-cron; fi
+*/5 * * * *     munin if [ -x <%= @bin_dir %>/munin-cron ]; then <%= @bin_dir %>/munin-cron; fi

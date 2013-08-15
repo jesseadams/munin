@@ -18,5 +18,10 @@ template "/etc/cron.d/munin" do
   mode "0644"
   owner "root"
   group node['munin']['root']['group']
+  variables({
+    :bin_dir => node['munin']['source']['bin_dir']
+  })
   backup 0
 end
+
+
