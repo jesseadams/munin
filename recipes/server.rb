@@ -158,7 +158,14 @@ when "openid"
     raise "OpenID is unsupported on non-apache installs"
   end
 else
-  template "#{node['munin']['basedir']}/htpasswd.users" do
+
+  if node['munin']['install_method'] == "source"
+    htpasswd_path = "#{node['munin']['source']['basedir']}/htpasswd.users"
+  else
+    htpasswd_path = "#{node['munin']['basedir']}/htpasswd.users"
+  end
+
+  template "#{htpasswd_path}" do
     source "htpasswd.users.erb"
     owner "munin"
     group web_group 
