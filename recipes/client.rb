@@ -43,12 +43,12 @@ elsif node['munin']['install_method'] == "source"
   plugins_dir = node['munin']['source']['plugins_dir']
 end
 
-template "#{node['munin']['basedir']}/munin-node.conf" do
+template "#{basedir}/munin-node.conf" do
   source "munin-node.conf.erb"
   mode 0644
   variables(
     :munin_servers => munin_servers,
-    :log_dir => node['munin']['log_dir']
+    :log_dir => log_dir
   )
   notifies :restart, "service[#{service_name}]"
 end
