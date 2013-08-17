@@ -116,7 +116,7 @@ if node['munin']['cgi_support']
   execute "munin-cron-run" do
     command "/usr/bin/node-cron"
     user "munin"
-    not_if { File.exists?("#{node['munin']['dbdir']}/datafile" || File.file?("/usr/bin/node-cron") == false}
+    not_if { File.exists?("#{node['munin']['dbdir']}/datafile") || File.file?("/usr/bin/node-cron") == false }
   end
 end
 
