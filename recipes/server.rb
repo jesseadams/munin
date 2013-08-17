@@ -114,9 +114,9 @@ if node['munin']['cgi_support']
 
   # Run munin-cron to generate data files requried for cgi
   execute "munin-cron-run" do
-    command "/usr/bin/node-cron"
+    command "/usr/bin/munin-cron"
     user "munin"
-    not_if { File.exists?("#{node['munin']['dbdir']}/datafile") || File.file?("/usr/bin/node-cron") == false }
+    not_if { File.exists?("#{node['munin']['dbdir']}/datafile") || File.file?("/usr/bin/munin-cron") == false }
   end
 end
 
