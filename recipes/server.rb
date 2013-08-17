@@ -143,6 +143,10 @@ if node['munin']['cgi_support']
     command "/usr/bin/munin-cron"
     user "munin"
     not_if { File.exists?("#{node['munin']['dbdir']}/datafile") || File.file?("/usr/bin/munin-cron") == false }
+    # We need to treat 1 as success because of the known problem with first munin runs
+    # author is aware of the problem and eventually it should be fixed
+    # unitl then we should use two return codes
+    returns [0, 1]
   end
 end
 
