@@ -53,9 +53,10 @@ Attributes
 * `node['munin']['docroot']` - document root for the server apache
   vhost. on archlinux, the default is `/srv/http/munin`, or
   `/var/www/munin` on other platforms.
+* `node['munin']['logdir']` - basedir for log files
 * `node['munin']['web_server']` - supports apache or nginx, default is
   "apache"
-* `node['munin']['nginx_fastcgi_support']` - provides fast-cgi graphs config section for "nginx" web_server. Default false.
+* `node['munin']['cgi_support']` - Starting from munin version 2 it supports dynamic graphs generation through cgi. Default false.
 * `node['munin']['nginx_graph_fastcgi_address']` = fastcgi_pass address for nginx graph support
 * `node['munin']['nginx_html_fastcgi_address']` = fastcgi_pass address for nginx html support
 * `node['munin']['public_domain']` - override munin domain.

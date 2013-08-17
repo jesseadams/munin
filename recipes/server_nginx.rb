@@ -14,7 +14,7 @@ template munin_conf do
   mode 0644
   variables(
     :public_domain => node['munin']['public_domain'],
-    :nginx_fastcgi_support => node['munin']['nginx_fastcgi_support'],
+    :cgi_support => node['munin']['cgi_support'],
     :docroot => node['munin']['docroot'],
     :log_dir => node['nginx']['log_dir'],
     :listen_port => node['munin']['web_server_port'],

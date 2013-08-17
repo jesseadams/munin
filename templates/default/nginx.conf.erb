@@ -9,7 +9,7 @@ server {
   auth_basic "Munin Server";
   auth_basic_user_file <%= @htpasswd_file %>;
 
-  <% if @nginx_fastcgi_support %>
+  <% if @cgi_support %>
   location ^~ /cgi-bin/munin-cgi-graph/ {
     fastcgi_split_path_info ^(/cgi-bin/munin-cgi-graph)(.*);
     fastcgi_param PATH_INFO $fastcgi_path_info;

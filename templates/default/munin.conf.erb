@@ -3,7 +3,7 @@
 # must be writable by the user running munin-cron.
 dbdir   <%= node['munin']['dbdir'] %>
 htmldir <%= @docroot %>
-logdir  /var/log/munin
+logdir  <%= @logdir %>
 rundir  /var/run/munin
 
 <% node['munin']['contacts'].each do |kind, command| %>

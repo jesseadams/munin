@@ -100,7 +100,24 @@ end
 template "#{node['munin']['basedir']}/munin.conf" do
   source "munin.conf.erb"
   mode 0644
-  variables(:munin_nodes => munin_servers, :docroot => node['munin']['docroot'])
+  variables(:munin_nodes => munin_servers, :docroot => node['munin']['docroot'], :logdir => node['munin']['logdir'])
+end
+
+if node['munin']['cgi_support']
+  # Make sure cgi processes can write to a log file
+  ["#{node['munin']['logdir']}/munin-cgi-graph.log", "#{node['munin']['logdir']}/munin-cgi-html.log"].each do |filename|
+    file filename do
+      owner "munin"
+      group "adm"
+    end
+  end
+
+  # Run munin-cron to generate data files requried for cgi
+  execute "munin-cron-run" do
+    command "/usr/bin/node-cron"
+    user "munin"
+    not_if { File.exists?("#{node['munin']['dbdir']}/datafile" || File.file?("/usr/bin/node-cron") == false}
+  end
 end
 
 case node['munin']['server_auth_method']
