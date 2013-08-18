@@ -36,7 +36,7 @@ template "#{node['munin']['basedir']}/munin-node.conf" do
   source "munin-node.conf.erb"
   mode 0644
   variables :munin_servers => munin_servers
-  notifies :restart, "service[#{service_name}]"
+  notifies :restart, "service[#{service_name}]", :immediately
 end
 
 case node['platform']

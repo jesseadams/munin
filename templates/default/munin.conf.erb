@@ -6,6 +6,12 @@ htmldir <%= @docroot %>
 logdir  <%= @logdir %>
 rundir  /var/run/munin
 
+<% if node['munin']['cgi_support'] %>
+  html_strategy cgi
+  graph_strategy cgi
+  cgiurl_graph /munin-cgi/munin-cgi-graph
+<% end %>
+
 <% node['munin']['contacts'].each do |kind, command| %>
 contact.<%= kind %>.contact  <%= command %>
 <% end if node['munin']['contacts'] %>

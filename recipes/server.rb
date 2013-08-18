@@ -142,11 +142,7 @@ if node['munin']['cgi_support']
   execute "munin-cron-run" do
     command "/usr/bin/munin-cron"
     user "munin"
-    not_if { File.exists?("#{node['munin']['dbdir']}/datafile") || File.file?("/usr/bin/munin-cron") == false }
-    # We need to treat 1 as success because of the known problem with first munin runs
-    # author is aware of the problem and eventually it should be fixed
-    # unitl then we should use two return codes
-    returns [0, 1]
+    not_if { File.exists?("#{node['munin']['dbdir']}/htmlconf.storable") || File.file?("/usr/bin/munin-cron") == false }
   end
 end
 
