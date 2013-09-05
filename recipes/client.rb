@@ -23,6 +23,8 @@ else
   munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
 end
 
+munin_servers.sort! { |a,b| a[:name] <=> b[:name] }
+
 package "munin-node"
 
 service_name = node['munin']['service_name']
