@@ -46,7 +46,7 @@ Attributes
 * `node['munin']['server_auth_method']` - the authentication method to
   use, default is openid. Any other value will use htauth basic with
   an htpasswd file.
-* `node['munin']['multi_environment_monitoring']` - allow 
+* `node['munin']['multi_environment_monitoring']` - allow
    multi-environment monitoring.  Default is false.
 * `node['munin']['server_role']` - role of the munin server. Default
   is monitoring.

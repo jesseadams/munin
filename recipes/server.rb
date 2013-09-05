@@ -55,7 +55,7 @@ include_recipe "munin::client"
 sysadmins = search(:users, 'groups:sysadmin')
 if node['munin']['multi_environment_monitoring']
   munin_servers = search(:node, "munin:[* TO *]")
-else  
+else
   munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
 end
 if munin_servers.empty?
@@ -114,7 +114,7 @@ else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner "munin"
-    group web_group 
+    group web_group
     mode 0644
     variables(
       :sysadmins => sysadmins
