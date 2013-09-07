@@ -31,7 +31,7 @@ service_name = node['munin']['service_name']
 
 service service_name do
   supports :restart => true
-  action :enable
+  action [:start,:enable]
 end
 
 template "#{node['munin']['basedir']}/munin-node.conf" do
