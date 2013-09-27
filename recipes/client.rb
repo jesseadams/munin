@@ -27,14 +27,9 @@ else
   end
 end
 
+munin_servers.sort! { |a,b| a[:name] <=> b[:name] }
+
 package "munin-node"
-
-service_name = node['munin']['service_name']
-
-service service_name do
-  supports :restart => true
-  action :enable
-end
 
 template "#{node['munin']['basedir']}/munin-node.conf" do
   source "munin-node.conf.erb"
@@ -49,4 +44,11 @@ when "arch", "smartos"
     not_if { Dir.entries(node['munin']['plugins']).length > 2 }
     notifies :restart, "service[#{service_name}]"
   end
+end
+
+service_name = node['munin']['service_name']
+
+service service_name do
+  supports :restart => true
+  action [:start, :enable]
 end

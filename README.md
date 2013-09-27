@@ -10,8 +10,8 @@ Requirements
 Requires Chef 0.10.0+ for Chef environments. Supports both chef-solo and chef-client ( with node searches support ).
 
 Chef-solo:
-* If you have data bag called users all items within will be sarched and used to populate htpasswd file. Make sure you provide htpasswd field for user you want to have access to munin interface.
 * Since there is no search support for chef-solo, current node object will be used instead.
+* See Data Bags section below in order to configure access to Munin web UI.
 
 Chef-client:
 * The monitoring server that uses this recipe should have a role named
@@ -50,7 +50,7 @@ Attributes
 * `node['munin']['server_auth_method']` - the authentication method to
   use, default is openid. Any other value will use htauth basic with
   an htpasswd file.
-* `node['munin']['multi_environment_monitoring']` - allow 
+* `node['munin']['multi_environment_monitoring']` - allow
    multi-environment monitoring.  Default is false.
 * `node['munin']['server_role']` - role of the munin server. Default
   is monitoring.

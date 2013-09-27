@@ -57,7 +57,7 @@ if Chef::Config[:solo]
   users = data_bag('users')
   users.each do |user_info|
     user = data_bag_item('users', user_info)
-    sysadmins << user
+    sysadmins += user
   end
 else
   sysadmins = search(:users, 'groups:sysadmin')
@@ -129,7 +129,7 @@ else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source "htpasswd.users.erb"
     owner "munin"
-    group web_group 
+    group web_group
     mode 0644
     variables(
       :sysadmins => sysadmins
