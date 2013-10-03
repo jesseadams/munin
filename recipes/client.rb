@@ -17,10 +17,14 @@
 # limitations under the License.
 #
 
-if node['munin']['multi_environment_monitoring']
-  munin_servers = search(:node, "role:#{node['munin']['server_role']}")
+if Chef::Config[:solo]
+  munin_servers = [node]
 else
-  munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+  if node['munin']['multi_environment_monitoring']
+    munin_servers = search(:node, "role:#{node['munin']['server_role']}")
+  else  
+    munin_servers = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+  end
 end
 
 munin_servers.sort! { |a,b| a[:name] <=> b[:name] }

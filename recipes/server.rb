@@ -52,12 +52,23 @@ end
 
 include_recipe "munin::client"
 
-sysadmins = search(:users, 'groups:sysadmin')
-if node['munin']['multi_environment_monitoring']
-  munin_servers = search(:node, "munin:[* TO *]")
+sysadmins = []
+if Chef::Config[:solo]
+  sysadmins = data_bag('users').collect { |user| data_bag_item('users', user) }
 else
-  munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+  sysadmins = search(:users, 'groups:sysadmin')
 end
+
+if Chef::Config[:solo]
+  munin_servers = [node]
+else
+  if node['munin']['multi_environment_monitoring']
+    munin_servers = search(:node, "munin:[* TO *]")
+  else
+    munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
+  end
+end
+
 if munin_servers.empty?
   Chef::Log.info("No nodes returned from search, using this node so munin configuration has data")
   munin_servers = Array.new
