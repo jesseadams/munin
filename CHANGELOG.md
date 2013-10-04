@@ -13,6 +13,7 @@ v1.4.0
 
 ### New Feature
 - **[COOK-3471](https://tickets.opscode.com/browse/COOK-3471)** - Add initial Chef solo support
+
 v1.3.2
 ------
 ### Bug
