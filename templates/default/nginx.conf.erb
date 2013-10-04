@@ -2,16 +2,41 @@ server {
 
   listen <%= @listen_port %>;
   server_name munin <%= @public_domain %> <%= @fqdn %>;
-  access_log <%= File.join(@log_dir, 'nginx_access.log') %>;
-  error_log <%= File.join(@log_dir, 'nginx_error.log') %>;
+
+  access_log <%= File.join(@log_dir, 'munin_access.log') %>;
+  error_log <%= File.join(@log_dir, 'munin_error.log') %>;
+
+  auth_basic "Munin Server";
+  auth_basic_user_file <%= @htpasswd_file %>;
+
+  <% if @cgi_support %>
+  location ^~ /munin-cgi/munin-cgi-graph/ {
+    fastcgi_split_path_info ^(/munin-cgi/munin-cgi-graph)(.*);
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_pass <%= node['munin']['nginx_graph_fastcgi_address'] %>;
+    include fastcgi_params;
+  }
+
+  location ~* ^/static {
+    root <%= node['munin']['basedir'] %>;
+  }
+
+  location / {
+    fastcgi_split_path_info ^(/)(.*);
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_pass <%= node['munin']['nginx_html_fastcgi_address'] %>;
+    include fastcgi_params;
+  }
+
+  <% else %>
 
   location /munin {
     root <%= @docroot %>;
   }
 
   location / {
-    auth_basic "Munin Server";
-    auth_basic_user_file <%= @htpasswd_file %>;
     root <%= @docroot %>;
   }
+
+  <% end %>
 }

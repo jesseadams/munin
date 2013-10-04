@@ -1,7 +1,3 @@
-service 'apache2' do
-  action :stop
-end
-
 include_recipe "nginx"
 
 %w(default 000-default).each do |disable_site|
@@ -18,12 +14,13 @@ template munin_conf do
   mode 0644
   variables(
     :public_domain => node['munin']['public_domain'],
+    :cgi_support => node['munin']['cgi_support'],
     :docroot => node['munin']['docroot'],
     :log_dir => node['nginx']['log_dir'],
     :listen_port => node['munin']['web_server_port'],
     :htpasswd_file => File.join(node['munin']['basedir'], 'htpasswd.users')
   )
-  if(::File.symlink?(munin_conf))
+  if(::File.exist?(munin_conf))
     notifies :reload, 'service[nginx]'
   end
 end

@@ -69,8 +69,13 @@ else
   default['munin']['node']['log_dir'] = "/var/log/munin"
 end
 
+default['munin']['logdir'] = "/var/log/munin"
 default['munin']['plugins'] = "#{default['munin']['basedir']}/plugins"
 default['munin']['tmpldir'] = "#{default['munin']['basedir']}/templates"
 default['munin']['max_graph_jobs'] = "6"
 default['munin']['max_cgi_graph_jobs'] = "6"
 default['munin']['max_processes'] = nil # use as many as necessary
+
+default['munin']['cgi_support'] = false
+default['munin']['nginx_graph_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-graph.sock'
+default['munin']['nginx_html_fastcgi_address'] = 'unix:/var/run/munin/fastcgi-html.sock'
