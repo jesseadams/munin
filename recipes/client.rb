@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+service_name = node['munin']['service_name']
+
 if Chef::Config[:solo]
   munin_servers = [node]
 else
@@ -45,8 +47,6 @@ when "arch", "smartos"
     notifies :restart, "service[#{service_name}]"
   end
 end
-
-service_name = node['munin']['service_name']
 
 service service_name do
   supports :restart => true
