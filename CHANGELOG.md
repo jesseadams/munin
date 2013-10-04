@@ -3,6 +3,16 @@ munin Cookbook CHANGELOG
 This file is used to list changes made in each version of the munin cookbook.
 
 
+
+v1.4.0
+------
+### Bug
+- **[COOK-3581](https://tickets.opscode.com/browse/COOK-3581)** - Ensure munin-node is started before enabling the service
+- **[COOK-3224](https://tickets.opscode.com/browse/COOK-3224)** - Fix crashe in client recipe (comparison of Chef::Node with Chef::Node failed)
+- **[COOK-2881](https://tickets.opscode.com/browse/COOK-2881)** - Use correct log dir on EPEL
+
+### New Feature
+- **[COOK-3471](https://tickets.opscode.com/browse/COOK-3471)** - Add initial Chef solo support
 v1.3.2
 ------
 ### Bug
