@@ -2,7 +2,7 @@
 # Cookbook Name:: munin
 # Definition:: munin_plugin
 #
-# Copyright 2010, OpsCode, Inc.
+# Copyright 2010-2013, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,8 @@
 # limitations under the License.
 #
 
-
-
 define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'munin' do
-
-  include_recipe "munin::client"
+  include_recipe 'munin::client'
 
   plugin = params[:plugin] ? params[:plugin] : params[:name]
   plugin_config = params[:plugin_config] ? params[:plugin_config] : node['munin']['plugins']
@@ -32,10 +29,10 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
   if params[:create_file]
     cookbook_file "#{plugin_dir}/#{params[:name]}" do
       cookbook params[:cookbook]
-      source "plugins/#{params[:name]}"
-      owner "root"
-      group node['munin']['root']['group']
-      mode 0755
+      source   "plugins/#{params[:name]}"
+      owner    'root'
+      group    node['munin']['root']['group']
+      mode     '0755'
     end
   end
 
@@ -46,7 +43,6 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
     else
       action :delete
     end
-    notifies :restart, resources(:service => service_name)
+    notifies :restart, "service[#{service_name}]"
   end
-
 end

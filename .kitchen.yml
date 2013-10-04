@@ -1,0 +1,23 @@
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+
+platforms:
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: centos-6.4
+
+suites:
+  - name: client
+    run_list:
+      - recipe[munin::client]
+  - name: server
+    run_list:
+      - recipe[munin::server]
+  - name: server_apache
+    run_list:
+      - recipe[munin::server_apache]
+  - name: server_nginx
+    run_list:
+      - recipe[munin::server_nginx]

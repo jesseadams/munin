@@ -2,7 +2,7 @@
 # Cookbook Name:: munin
 # Recipe:: server
 #
-# Copyright 2010-2011, Opscode, Inc.
+# Copyright 2010-2013, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@
 unless node['munin']['public_domain']
   if node['public_domain']
     case node.chef_environment
-    when "production"
+    when 'production'
       public_domain = node['public_domain']
     else
       if node['munin']['multi_environment_monitoring']
         public_domain = node['public_domain']
       else
-        env = node.chef_environment =~ /_default/ ? "default" : node.chef_environment
+        env = node.chef_environment =~ /_default/ ? 'default' : node.chef_environment
         public_domain = "#{env}.#{node['public_domain']}"
       end
     end
@@ -40,21 +40,19 @@ web_srv = node['munin']['web_server'].to_sym
 case web_srv
 when :apache
   include_recipe 'munin::server_apache'
-  web_user = node['apache']['user']
   web_group = node['apache']['group']
 when :nginx
   include_recipe 'munin::server_nginx'
-  web_user = node['nginx']['user']
   web_group = node['nginx']['group']
 else
-  raise "Unsupported web server type provided for munin. Supported: apache or nginx"
+  raise 'Unsupported web server type provided for munin. Supported: apache or nginx'
 end
 
-include_recipe "munin::client"
+include_recipe 'munin::client'
 
 sysadmins = []
 if Chef::Config[:solo]
-  sysadmins = data_bag('users').collect { |user| data_bag_item('users', user) }
+  sysadmins = data_bag('users').map { |user| data_bag_item('users', user) }
 else
   sysadmins = search(:users, 'groups:sysadmin')
 end
@@ -63,70 +61,71 @@ if Chef::Config[:solo]
   munin_servers = [node]
 else
   if node['munin']['multi_environment_monitoring']
-    munin_servers = search(:node, "munin:[* TO *]")
+    munin_servers = search(:node, 'munin:[* TO *]')
   else
     munin_servers = search(:node, "munin:[* TO *] AND chef_environment:#{node.chef_environment}")
   end
 end
 
 if munin_servers.empty?
-  Chef::Log.info("No nodes returned from search, using this node so munin configuration has data")
-  munin_servers = Array.new
-  munin_servers << node
+  Chef::Log.info 'No nodes returned from search, using this node so munin configuration has data'
+  munin_servers = [node]
 end
 
-munin_servers.sort! { |a,b| a[:fqdn] <=> b[:fqdn] }
+munin_servers.sort! { |a, b| a['fqdn'] <=> b['fqdn'] }
 
 case node['platform']
-when "freebsd"
-  package "munin-master"
+when 'freebsd'
+  package 'munin-master'
 else
-  package "munin"
+  package 'munin'
 end
 
 case node['platform']
-when "arch"
-  cron "munin-graph-html" do
-    command "/usr/bin/munin-cron"
-    user "munin"
-    minute "*/5"
+when 'arch'
+  cron 'munin-graph-html' do
+    command '/usr/bin/munin-cron'
+    user    'munin'
+    minute  '*/5'
   end
-when "freebsd"
-  cron "munin-graph-html" do
-    command "/usr/local/bin/munin-cron"
-    user "munin"
-    minute "*/5"
+when 'freebsd'
+  cron 'munin-graph-html' do
+    command        '/usr/local/bin/munin-cron'
+    user           'munin'
+    minute         '*/5'
     ignore_failure true
   end
 else
-  cookbook_file "/etc/cron.d/munin" do
-    source "munin-cron"
-    mode "0644"
-    owner "root"
-    group node['munin']['root']['group']
+  cookbook_file '/etc/cron.d/munin' do
+    source 'munin-cron'
+    mode   '0644'
+    owner  'root'
+    group  node['munin']['root']['group']
     backup 0
   end
 end
 
 template "#{node['munin']['basedir']}/munin.conf" do
-  source "munin.conf.erb"
-  mode 0644
-  variables(:munin_nodes => munin_servers, :docroot => node['munin']['docroot'])
+  source 'munin.conf.erb'
+  mode   '0644'
+  variables(
+    :munin_nodes => munin_servers
+  )
 end
 
 case node['munin']['server_auth_method']
-when "openid"
-  if(web_srv == :apache)
-    include_recipe "apache2::mod_auth_openid"
+when 'openid'
+  if web_srv == :apache
+    include_recipe 'apache2::mod_auth_openid'
   else
-    raise "OpenID is unsupported on non-apache installs"
+    raise 'OpenID is unsupported on non-apache installs'
   end
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
-    source "htpasswd.users.erb"
-    owner "munin"
-    group web_group
-    mode 0644
+    source 'htpasswd.users.erb'
+    owner  'munin'
+    group  web_group
+    mode   '0644'
     variables(
       :sysadmins => sysadmins
     )
@@ -134,8 +133,7 @@ else
 end
 
 directory node['munin']['docroot'] do
-  owner "munin"
-  group "munin"
-  mode 0755
+  owner 'munin'
+  group 'munin'
+  mode  '0755'
 end
-

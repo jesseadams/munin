@@ -1,0 +1,16 @@
+AllCops:
+  Excludes:
+    - vendor/**
+
+AlignParameters:
+  Enabled: false
+Encoding:
+  Enabled: false
+HashSyntax:
+  Enabled: false
+LineLength:
+  Enabled: false
+BlockNesting:
+  Enabled: false # @todo enable this
+MethodLength:
+  Max: 30
