@@ -1,6 +1,6 @@
 munin Cookbook
 ==============
-[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/munin.png?branch=master)](http://travis-ci.org/opscode-cookbooks/munin)
+[![Build Status](https://secure.travis-ci.org/jesseadams/munin.png?branch=master)](http://travis-ci.org/jesseadams/munin)
 
 Installs and configures Munin for a server and for clients using Chef Server search capabilities.
 

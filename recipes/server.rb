@@ -45,7 +45,7 @@ when :nginx
   include_recipe 'munin::server_nginx'
   web_group = node['nginx']['group']
 else
-  raise 'Unsupported web server type provided for munin. Supported: apache or nginx'
+  fail 'Unsupported web server type provided for munin. Supported: apache or nginx'
 end
 
 include_recipe 'munin::client'
@@ -118,7 +118,7 @@ when 'openid'
   if web_srv == :apache
     include_recipe 'apache2::mod_auth_openid'
   else
-    raise 'OpenID is unsupported on non-apache installs'
+    fail 'OpenID is unsupported on non-apache installs'
   end
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
