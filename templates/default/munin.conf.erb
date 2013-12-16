@@ -24,6 +24,7 @@ max_cgi_graph_jobs <%= node['munin']['max_cgi_graph_jobs'] %>
 
 # a simple host tree
 <% @munin_nodes.each do |system| -%>
+# <%= system %>
 [<%= system['fqdn'] %>]
     address <%= system['ipaddress'] %>
     use_node_name yes
