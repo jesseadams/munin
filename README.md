@@ -33,7 +33,7 @@ Attributes
 - `node['munin']['web_server_port']` - port that the munin vhost runs on, default 80
 - `node['munin']['sysadmin_email']` - default email address for serveradmin in vhost.
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
-- `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false.
+- `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. When true all environments are searched for clients, when its a list of environment names, only these environments are searched for clients.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
