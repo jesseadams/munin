@@ -24,6 +24,10 @@ max_cgi_graph_jobs <%= node['munin']['max_cgi_graph_jobs'] %>
 
 includedir <%= node['munin']['basedir'] %>/munin-conf.d
 
+<% if node['munin']['graph_strategy'] %>
+graph_strategy <%= node['munin']['graph_strategy'] %>
+<% end %>
+
 # a simple host tree
 <% @munin_nodes.each do |system| -%>
 [<%= system['fqdn'] %>]
