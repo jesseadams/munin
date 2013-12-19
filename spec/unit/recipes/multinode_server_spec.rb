@@ -58,8 +58,8 @@ describe 'munin::server' do
         'nathen' => { 'htpasswd' => 'abc123' },
       )
 
-      ChefSpec::Server.create_environment('onsite', {description: 'onsite env'})
-      ChefSpec::Server.create_environment('offsite', {description: 'offsite env'})
+      ChefSpec::Server.create_environment('onsite', description: 'onsite env')
+      ChefSpec::Server.create_environment('offsite', description: 'offsite env')
 
       host0 = stub_node('host0', platform: 'debian', version: '7.1', ohai: {
         'fqdn' => 'host0.example.com',
