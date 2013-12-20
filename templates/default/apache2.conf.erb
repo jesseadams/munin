@@ -30,4 +30,42 @@
   RewriteEngine On
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
   RewriteRule ^(.*)index\.html$ $1 [R=301,L]
+
+<% if node['munin'].fetch('graph_strategy', 'cron') == 'cgi' %>
+  <IfModule mod_rewrite.c>
+    # Rewrite rules to serve traffic from the root instead of /munin-cgi
+    RewriteEngine On
+
+    # Static files
+    RewriteRule ^/favicon.ico /var/www/munin/static/favicon.ico [L]
+    RewriteRule ^/static/(.*) /var/www/munin/static/$1          [L]
+
+    # HTML
+    RewriteRule ^(/.*\.html)?$           /munin-cgi/munin-cgi-html/$1 [PT]
+
+    # Images
+    RewriteRule ^/munin-cgi/munin-cgi-graph/(.*) /$1
+    RewriteCond %{REQUEST_URI}                 !^/static
+    RewriteRule ^/(.*.png)$  /munin-cgi/munin-cgi-graph/$1 [L,PT]
+  </IfModule>
+
+  # Ensure we can run (fast)cgi scripts
+  ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
+  <Location /munin-cgi/munin-cgi-graph>
+    Options +ExecCGI
+    <IfModule mod_fcgid.c>
+      SetHandler fcgid-script
+    </IfModule>
+    Allow from all
+  </Location>
+
+  ScriptAlias /munin-cgi/munin-cgi-html /usr/lib/munin/cgi/munin-cgi-html
+  <Location /munin-cgi/munin-cgi-html>
+    Options +ExecCGI
+    <IfModule mod_fcgid.c>
+      SetHandler fcgid-script
+    </IfModule>
+    Allow from all
+  </Location>
+<% end %>
 </VirtualHost>
