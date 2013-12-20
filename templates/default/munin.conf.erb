@@ -22,6 +22,8 @@ max_processes <%= node['munin']['max_processes'] %>
 max_graph_jobs <%= node['munin']['max_graph_jobs'] %>
 max_cgi_graph_jobs <%= node['munin']['max_cgi_graph_jobs'] %>
 
+includedir <%= node['munin']['basedir'] %>/munin-conf.d
+
 # a simple host tree
 <% @munin_nodes.each do |system| -%>
 [<%= system['fqdn'] %>]
