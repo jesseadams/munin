@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'munin::client' do
-  let(:chef_run) { ChefSpec::ChefRunner.new.converge(described_recipe) }
+  let(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
 
   it 'installs the munin-node package' do
     expect(chef_run).to install_package('munin-node')
@@ -12,11 +12,11 @@ describe 'munin::client' do
     expect(template).to be
     expect(template.source).to eq('munin-node.conf.erb')
     expect(template.mode).to eq('0644')
-    expect(template).to notify('service[munin-node]', :restart)
+    notify('service[munin-node]').to(:restart)
   end
 
   it 'starts and enables the service' do
-    expect(chef_run).to start_service('munin-node')
-    expect(chef_run).to set_service_to_start_on_boot('munin-node')
+    notify('service[munin-node]').to(:start)
+    expect(chef_run).to enable_service('munin-node')
   end
 end
