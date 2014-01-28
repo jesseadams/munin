@@ -8,15 +8,17 @@ describe 'munin::client' do
   end
 
   it 'writes the munin-node.conf' do
+    expect(chef_run).to create_template('/etc/munin/munin-node.conf').with(
+      source: 'munin-node.conf.erb',
+      mode: '0644'
+    )
+
     template = chef_run.template('/etc/munin/munin-node.conf')
-    expect(template).to be
-    expect(template.source).to eq('munin-node.conf.erb')
-    expect(template.mode).to eq('0644')
-    notify('service[munin-node]').to(:restart)
+    expect(template).to notify('service[munin-node]').to(:restart)
   end
 
   it 'starts and enables the service' do
-    notify('service[munin-node]').to(:start)
+    expect(chef_run).to start_service('munin-node')
     expect(chef_run).to enable_service('munin-node')
   end
 end
