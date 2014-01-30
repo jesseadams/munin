@@ -33,7 +33,7 @@ Attributes
 - `node['munin']['web_server_port']` - port that the munin vhost runs on, default 80
 - `node['munin']['sysadmin_email']` - default email address for serveradmin in vhost.
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
-- `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false.
+- `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
@@ -105,6 +105,11 @@ description 'Nodes in production'
 ```
 
 For chef-client mode clients will automatically search for the server based on the value of the `node['munin']['server_role']` attribute in the same environment. If you don't use `monitoring` as the role name, change it in a role that is applied to any nodes that get the `munin::client` recipe.
+
+### Multi-Environment Monitoring
+By default munin-server will only search the nodes own chef-environment for clients to monitor. Monitoring all available clients in all environment can be done by setting the ```node['munin']['multi_environment_monitoring'] = 'true'```.
+
+When ```node['munin']['multi_environment_monitoring']``` is set to a list of environment-names, only these environments are searched for munin-clients to monitor. So if you have the environments 'prod', 'staging' and 'dev' and want only nodes in 'prod' and 'staging' to be monitoried by munin-server, set ```node['munin']['multi_environment_monitoring'] = ['prod', 'staging']```.
 
 ### OpenID Authentication
 The recipe `apache2::mod_auth_openid` is updated to a version of the module that apparently does not support the `AuthOpenIDUserProgram` directive anymore. The virtual host file has been updated to use the Apache HTTPD `require user` directive, with a concatenated list from `node['apache']['allowed_openids']`. This value must be an array of OpenIDs. Use of the `users::sysadmins` recipe will set this up based on data bag search results.
