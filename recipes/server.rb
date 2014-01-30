@@ -113,6 +113,10 @@ template "#{node['munin']['basedir']}/munin.conf" do
   )
 end
 
+directory "#{node['munin']['basedir']}/munin-conf.d" do
+  action :create
+end
+
 case node['munin']['server_auth_method']
 when 'openid'
   if web_srv == :apache
