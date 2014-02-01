@@ -2,7 +2,12 @@ munin Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the munin cookbook.
 
-
+v1.4.2
+------
+- Loosened dependencies on other cookbooks (thanks [kesor](https://github.com/kesor))
+- Switched to ChefSpec 3.1 and added more tests (thanks [kampfschlaefer](https://github.com/kampfschlaefer) + [sethvargo](https://github.com/sethvargo)/[btm](https://github.com/btm))
+- Provided /etc/munin/munin-conf.d for additional configuration (thanks [kampfschlaefer](https://github.com/kampfschlaefer))
+- Extended multi environment monitoring to optionally just include certain chef environments via an array (thanks [kampfschlaefer](https://github.com/kampfschlaefer))
 
 v1.4.0
 ------
