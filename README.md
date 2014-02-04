@@ -46,7 +46,7 @@ Attributes
 Recipes
 -------
 ### client
-The client recipe installs munin-node package and starts the service. It also searches for a node with the role for the munin server, by default `node['munin']['server_role']`. On Archlinux, it builds the list of plugins to enable.
+The client recipe installs munin-node package and starts the service. It also searches for nodes with the role for the munin server, by default `node['munin']['server_role']` to allow access from their ip-addresses. On Archlinux, it builds the list of plugins to enable.
 
 ### server
 The server recipe will set up the munin server with Apache. It will create a cron job for generating the munin graphs, search for any nodes that have munin attributes (`node['munin']`), and use those nodes to connect for the graphs.
