@@ -20,12 +20,15 @@
 service_name = node['munin']['service_name']
 
 if Chef::Config[:solo]
-  munin_servers = [node]
+  munin_servers = [node['ipaddress']]
 else
-  munin_servers = search(:node, "role:#{node['munin']['server_role']}")
+  munin_servers = []
+  search(:node, "role:#{node['munin']['server_role']}").each do |srv|
+    munin_servers << srv['ipaddress']
+  end
 end
 
-munin_servers.sort! { |a, b| a['name'] <=> b['name'] }
+munin_servers.sort!
 
 package 'munin-node'
 
