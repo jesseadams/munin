@@ -35,6 +35,7 @@ Attributes
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
 - `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
+- `node['munin']['server_list']` - list of servers. This overrides `server_role`. Default is `nil`.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
 - `node['munin']['public_domain']` - override munin domain.
@@ -47,6 +48,11 @@ Recipes
 -------
 ### client
 The client recipe installs munin-node package and starts the service. It also searches for a node with the role for the munin server, by default `node['munin']['server_role']`. On Archlinux, it builds the list of plugins to enable.
+
+If you want finer control over the munin servers to use, you can set
+`node['munin']['server_list']` to a list of server ip addresses or host names.
+For example, you can use a wrapper cookbook to set this based on a complicated
+search.
 
 ### server
 The server recipe will set up the munin server with Apache. It will create a cron job for generating the munin graphs, search for any nodes that have munin attributes (`node['munin']`), and use those nodes to connect for the graphs.

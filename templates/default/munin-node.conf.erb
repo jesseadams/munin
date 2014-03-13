@@ -33,8 +33,6 @@ host_name <%= node['hostname'] %>.ec2.internal
 # regular expression, due to brain damage in Net::Server, which
 # doesn't understand CIDR-style network notation.  You may repeat
 # the allow line as many times as you'd like
-<% @munin_servers.each do |server| -%>
-allow ^<%= server['ipaddress'].to_s.gsub(/\./, '\.') %>$
+<% @munin_server_ips.each do |ipaddress| -%>
+allow ^<%= ipaddress.gsub(/\./, '\.') %>$
 <% end -%>
-allow ^127\.0\.0\.1$
-
