@@ -8,7 +8,7 @@ describe 'munin::server' do
   end
 
   before do
-    Chef::Recipe.any_instance.stub(:data_bag).with('users').and_return(%w[seth nathen])
+    Chef::Recipe.any_instance.stub(:data_bag).with('users').and_return(%w(seth nathen))
 
     Chef::Recipe.any_instance.stub(:data_bag_item).with('users', 'seth').and_return(
       Mash.new(id: 'seth', htpasswd: 'abc123')
