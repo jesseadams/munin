@@ -2,6 +2,10 @@ munin Cookbook CHANGELOG
 ========================
 This file is used to list changes made in each version of the munin cookbook.
 
+v1.4.3
+------
+- Added server_list attribute to contain a list of IP addresses of Munin servers (thanks [docwhat](https://github.com/docwhat))
+
 v1.4.2
 ------
 - Loosened dependencies on other cookbooks (thanks [kesor](https://github.com/kesor))
