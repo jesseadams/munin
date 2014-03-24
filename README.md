@@ -35,7 +35,7 @@ Attributes
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
 - `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
-- `node['munin']['server_list']` - list of servers. This overrides `server_role`. Default is `nil`.
+- `node['munin']['server_list']` - list of server ip addresses. This overrides `server_role`. Default is `nil`.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
 - `node['munin']['public_domain']` - override munin domain.
