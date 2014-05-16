@@ -32,7 +32,7 @@ Attributes
 ----------
 - `node['munin']['web_server_port']` - port that the munin vhost runs on, default 80
 - `node['munin']['sysadmin_email']` - default email address for serveradmin in vhost.
-- `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
+- `node['munin']['server_auth_method']` - the authentication method to use, default is openid. 'htauth' or 'htpasswd' will use htauth basic with an htpasswd file. Any other value will disable it.
 - `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 - `node['munin']['server_list']` - list of server ip addresses. This overrides `server_role`. Default is `nil`.
@@ -73,7 +73,7 @@ Create a `users` data bag that will contain the users that will be able to log i
 }
 ```
 
-When using `server_auth_method` 'openid', use the openid in the data bag item. Any other value for this attribute (e.g., "htauth", "htpasswd", etc) will use the htpasswd value as the password in `/etc/munin/htpasswd.users`.
+When using `server_auth_method` 'openid', use the openid in the data bag item. "htauth" or "htpasswd" will use the htpasswd value as the password in `/etc/munin/htpasswd.users`. Any other value for this attribute will disable any authentication method.
 
 - The openid must have the http:// and trailing /*. See __OpenID Authentication__ below for more information.
 
