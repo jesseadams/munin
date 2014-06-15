@@ -36,3 +36,14 @@ host_name <%= node['hostname'] %>.ec2.internal
 <% @munin_server_ips.each do |ipaddress| -%>
 allow ^<%= ipaddress.gsub(/\./, '\.') %>$
 <% end -%>
+
+<% if @munin_server_cidr_allow %>
+  <% @munin_server_cidr_allow.each do |cidr| -%>
+cidr_allow <%= cidr %>
+  <% end -%>
+<% end %>
+<% if @munin_server_cidr_deny %>
+  <% @munin_server_cidr_deny.each do |cidr| -%>
+cidr_deny <%= cidr %>
+  <% end -%>
+<% end %>
