@@ -46,7 +46,11 @@ package 'munin-node'
 template "#{node['munin']['basedir']}/munin-node.conf" do
   source 'munin-node.conf.erb'
   mode   '0644'
-  variables :munin_server_ips => munin_server_ips
+  variables({
+    :munin_server_ips => munin_server_ips,
+    :munin_server_cidr_allow => node['munin']['cidr_accept'],
+    :munin_server_cidr_deny => node['munin']['cidr_deny']
+  })
   notifies :restart, "service[#{service_name}]"
 end
 

@@ -20,6 +20,8 @@
 default['munin']['sysadmin_email'] = 'ops@example.com'
 default['munin']['server_role'] = 'monitoring'
 default['munin']['server_list'] = nil
+default['munin']['cidr_accept'] = nil
+default['munin']['cidr_deny'] = nil
 default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
 
