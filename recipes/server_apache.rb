@@ -24,6 +24,10 @@ end
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_rewrite'
 
+if node['munin'].fetch('graph_strategy', 'cron') == 'cgi'
+  include_recipe 'apache2::mod_fcgid'
+end
+
 apache_site '000-default' do
   enable false
 end

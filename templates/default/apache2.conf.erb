@@ -27,7 +27,32 @@
   </Location>
 <% end -%>
 
+<% if node['munin'].fetch('graph_strategy', 'cron') == 'cgi' %>
+  # Rewrites
   RewriteEngine On
-  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/
-  RewriteRule ^(.*)index\.html$ $1 [R=301,L]
+
+  # Static content in static
+  RewriteRule ^/favicon.ico /etc/munin/static/favicon.ico [L]
+  RewriteRule ^/static/(.*) /etc/munin/static/$1          [L]
+
+  # HTML
+  RewriteCond %{REQUEST_URI} .html$ [or]
+  RewriteCond %{REQUEST_URI} !.png$
+  RewriteRule ^/(.*) /usr/lib/munin/cgi/munin-cgi-html/$1 [L]
+
+  # Images
+  RewriteRule ^/munin-cgi/munin-cgi-graph/(.*) /$1
+  RewriteRule ^/(.*\.png) /usr/lib/munin/cgi/munin-cgi-graph/$1 [L]
+
+  # Ensure we can run (fast)cgi scripts
+  <Directory "/usr/lib/munin/cgi">
+    Options +ExecCGI
+    <IfModule mod_fcgid.c>
+      SetHandler fcgid-script
+    </IfModule>
+    <IfModule !mod_fcgid.c>
+      SetHandler cgi-script
+    </IfModule>
+  </Directory>
+<% end %>
 </VirtualHost>
