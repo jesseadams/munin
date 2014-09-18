@@ -28,6 +28,7 @@ default['munin']['web_server_port'] = 80
 default['munin']['public_domain'] = nil
 
 default['munin']['monitoring_interface'] = nil
+default['munin']['users_group'] = 'sysadmins'
 
 case node['platform']
 when 'arch'
