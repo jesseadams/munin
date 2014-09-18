@@ -27,7 +27,7 @@ includedir <%= node['munin']['basedir'] %>/munin-conf.d
 # a simple host tree
 <% @munin_nodes.each do |system| -%>
 [<%= system['fqdn'] %>]
-    address <%= system['ipaddress'] %>
+    address <%= ip_to_monitor(system) %>
     use_node_name yes
 
 <% end -%>
