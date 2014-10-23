@@ -36,4 +36,4 @@ template "#{node['apache']['dir']}/sites-available/munin.conf" do
   end
 end
 
-apache_site 'munin.conf'
+apache_site 'munin'
