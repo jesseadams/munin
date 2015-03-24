@@ -18,13 +18,20 @@
 #
 
 default['munin']['sysadmin_email'] = 'ops@example.com'
+default['munin']['server_name']   = node['fqdn']
 default['munin']['server_role'] = 'monitoring'
 default['munin']['server_list'] = nil
 default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
 
+default['munin']['enable_ssl']    = false
+default['munin']['ssl_cert_file'] = "#{node['munin']['basedir']}/certificates/munin-server.pem"
+default['munin']['ssl_cert_key']  = "#{node['munin']['basedir']}/certificates/munin-server.pem"
+default['munin']['ssl_req']       = '/C=US/ST=Several/L=Locality/O=Example/OU=Operations/' \
+  "CN=#{node['munin']['server_name']}/emailAddress=ops@#{node['munin']['server_name']}"
+
 default['munin']['web_server'] = 'apache'
-default['munin']['web_server_port'] = 80
+default['munin']['web_server_port'] = node['munin']['enable_ssl'] ? '443' : '80'
 default['munin']['public_domain'] = nil
 
 case node['platform']

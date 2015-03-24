@@ -126,6 +126,23 @@ directory "#{node['munin']['basedir']}/munin-conf.d" do
   action :create
 end
 
+directory "#{node['munin']['conf_dir']}/certificates" do
+  owner web_user
+  group web_group
+  mode '0700'
+end
+
+bash 'Create SSL Certificates' do
+  cwd "#{node['munin']['conf_dir']}/certificates"
+  code <<-EOH
+  umask 077
+  openssl genrsa 2048 > munin-server.key
+  openssl req -subj "#{node['munin']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key munin-server.key > munin-server.crt
+  cat munin-server.key munin-server.crt > munin-server.pem
+  EOH
+  not_if { ::File.exist?(node['munin']['ssl_cert_file']) }
+end
+
 case node['munin']['server_auth_method']
 when 'openid'
   if web_srv == :apache

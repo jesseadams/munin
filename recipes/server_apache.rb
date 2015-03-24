@@ -23,6 +23,7 @@ end
 
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_rewrite'
+include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
 
 apache_site '000-default' do
   enable false
@@ -31,6 +32,11 @@ end
 template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source 'apache2.conf.erb'
   mode   '0644'
+  variables(
+    :https         => node['munin']['enable_ssl'],
+    :ssl_cert_file => node['munin']['ssl_cert_file'],
+    :ssl_cert_key  => node['munin']['ssl_cert_key']
+  )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, 'service[apache2]'
   end
