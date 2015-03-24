@@ -127,15 +127,15 @@ directory "#{node['munin']['basedir']}/munin-conf.d" do
 end
 
 directory "#{node['munin']['conf_dir']}/certificates" do
-  owner web_user
+  owner 'munin'
   group web_group
-  mode '0700'
+  mode '0770'
 end
 
 bash 'Create SSL Certificates' do
   cwd "#{node['munin']['conf_dir']}/certificates"
   code <<-EOH
-  umask 077
+  umask 007
   openssl genrsa 2048 > munin-server.key
   openssl req -subj "#{node['munin']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key munin-server.key > munin-server.crt
   cat munin-server.key munin-server.crt > munin-server.pem
