@@ -52,7 +52,9 @@ The client recipe installs munin-node package and starts the service. It also se
 If you want finer control over the munin servers to use, you can set
 `node['munin']['server_list']` to a list of server ip addresses or host names.
 For example, you can use a wrapper cookbook to set this based on a complicated
-search.
+search:
+
+`:munin => { :server_list => ["127.0.0.1","x.x.x.x","y.y.y.y"]`
 
 ### server
 The server recipe will set up the munin server with Apache. It will create a cron job for generating the munin graphs, search for any nodes that have munin attributes (`node['munin']`), and use those nodes to connect for the graphs.
@@ -79,6 +81,8 @@ When using `server_auth_method` 'openid', use the openid in the data bag item. A
 
 The htpasswd must be the hashed value. Get this value with htpasswd:
 
+For Apache:
+
 ```text
 % htpasswd -n -s munin
 New password:
@@ -86,7 +90,17 @@ Re-type new password:
 nagiosadmin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
 ```
 
-For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
+For Nginx: 
+
+```text
+% htpasswd -n munin
+New password:
+Re-type new password:
+nagiosadmin:$apr1$9hOmLZxz$7.bMiY7jA3QACRApzSFl01
+```
+
+For Apache use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
+For Nginx use the `$apr1$9hOmLZxz$7.bMiY7jA3QACRApzSFl01` value in the data bag.
 
 
 Usage
