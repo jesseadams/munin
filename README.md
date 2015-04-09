@@ -52,7 +52,9 @@ The client recipe installs munin-node package and starts the service. It also se
 If you want finer control over the munin servers to use, you can set
 `node['munin']['server_list']` to a list of server ip addresses or host names.
 For example, you can use a wrapper cookbook to set this based on a complicated
-search.
+search:
+
+`:munin => { :server_list => ["127.0.0.1","x.x.x.x","y.y.y.y"]`
 
 ### server
 The server recipe will set up the munin server with Apache. It will create a cron job for generating the munin graphs, search for any nodes that have munin attributes (`node['munin']`), and use those nodes to connect for the graphs.
