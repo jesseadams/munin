@@ -79,6 +79,8 @@ When using `server_auth_method` 'openid', use the openid in the data bag item. A
 
 The htpasswd must be the hashed value. Get this value with htpasswd:
 
+For Apache:
+
 ```text
 % htpasswd -n -s munin
 New password:
@@ -86,7 +88,17 @@ Re-type new password:
 nagiosadmin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
 ```
 
-For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
+For Nginx: 
+
+```text
+% htpasswd -n munin
+New password:
+Re-type new password:
+nagiosadmin:$apr1$9hOmLZxz$7.bMiY7jA3QACRApzSFl01
+```
+
+For Apache use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
+For Nginx use the `$apr1$9hOmLZxz$7.bMiY7jA3QACRApzSFl01` value in the data bag.
 
 
 Usage
