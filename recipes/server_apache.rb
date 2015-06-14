@@ -34,8 +34,8 @@ template "#{node['apache']['dir']}/sites-available/munin.conf" do
   mode   '0644'
   variables(
     :https         => node['munin']['enable_ssl'],
-    :ssl_cert_file => lazy{ "#{node['munin']['basedir']}/certificates/munin-server.pem" },
-    :ssl_cert_key  => lazy{ "#{node['munin']['basedir']}/certificates/munin-server.pem" },
+    :ssl_cert_file => "#{node['munin']['basedir']}/certificates/munin-server.pem",
+    :ssl_cert_key  => "#{node['munin']['basedir']}/certificates/munin-server.pem",
   )
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, 'service[apache2]'

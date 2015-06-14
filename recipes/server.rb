@@ -140,7 +140,7 @@ bash 'Create SSL Certificates' do
   openssl req -subj "#{node['munin']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key munin-server.key > munin-server.crt
   cat munin-server.key munin-server.crt > munin-server.pem
   EOH
-  not_if { ::File.exist?(node['munin']['ssl_cert_file']) }
+  not_if { ::File.exist?("#{node['munin']['basedir']}/certificates/munin-server.pem") }
 end
 
 case node['munin']['server_auth_method']
