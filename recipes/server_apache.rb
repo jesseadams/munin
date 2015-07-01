@@ -23,7 +23,7 @@ end
 
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_rewrite'
-include_recipe 'apache2::mod_ssl' if node['nagios']['enable_ssl']
+include_recipe 'apache2::mod_ssl' if node['munin']['enable_ssl']
 
 apache_site '000-default' do
   enable false
