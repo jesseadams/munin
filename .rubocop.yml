@@ -14,3 +14,7 @@ BlockNesting:
   Enabled: false # @todo enable this
 MethodLength:
   Max: 30
+
+# Disabled to allow spacing of variables for readability
+Style/SingleSpaceBeforeFirstArg:
+  Enabled: false

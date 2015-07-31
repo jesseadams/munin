@@ -62,7 +62,7 @@ if Chef::Config[:solo]
 else
   munin_servers = []
   if node['munin']['multi_environment_monitoring']
-    if node['munin']['multi_environment_monitoring'].kind_of?(Array)
+    if node['munin']['multi_environment_monitoring'].is_a?(Array)
       node['munin']['multi_environment_monitoring'].each do |searchenv|
         search(:node, "munin:[* TO *] AND chef_environment:#{searchenv}").each do |n|
           munin_servers << n
