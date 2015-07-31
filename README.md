@@ -34,6 +34,7 @@ Attributes
 - `node['munin']['sysadmin_email']` - default email address for serveradmin in vhost.
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
 - `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
+- `node['munin']['update_hostname_ec2']` - Updates the hostname to `#{node['hostname']}.ec2.internal` in munin-node.conf.  Otherwise the `hostname` directive is not specified. Default is true.
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 - `node['munin']['server_list']` - list of server ip addresses. This overrides `server_role`. Default is `nil`.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.

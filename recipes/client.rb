@@ -22,8 +22,8 @@ service_name = node['munin']['service_name']
 
 if node['munin']['server_list']
   munin_server_ips = node['munin']['server_list']
-    .sort
-    .map { |hostname| IPSocket.getaddress(hostname) }
+                     .sort
+                     .map { |hostname| IPSocket.getaddress(hostname) }
 else
   if Chef::Config[:solo]
     munin_server_ips = [node['ipaddress']]
@@ -34,8 +34,8 @@ else
       munin_server_nodes = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
     end
     munin_server_ips = munin_server_nodes
-      .sort { |a, b| a['name'] <=> b['name'] }
-      .map { |n| n['ipaddress'] }
+                       .sort { |a, b| a['name'] <=> b['name'] }
+                       .map { |n| n['ipaddress'] }
   end
 end
 
