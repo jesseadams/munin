@@ -22,6 +22,7 @@ default['munin']['server_role'] = 'monitoring'
 default['munin']['server_list'] = nil
 default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
+default['munin']['update_hostname_ec2'] = true
 
 default['munin']['web_server'] = 'apache'
 default['munin']['web_server_port'] = 80
