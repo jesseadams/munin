@@ -27,6 +27,9 @@
     AuthType OpenID
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
+
+    Order allow,deny
+    Allow from all
   </Location>
 <% else -%>
   <Location />
@@ -34,6 +37,8 @@
     AuthType Basic
     AuthUserFile "<%= node['munin']['basedir'] %>/htpasswd.users"
     require valid-user
+    Order allow,deny
+    Allow from all
   </Location>
 <% end -%>
 

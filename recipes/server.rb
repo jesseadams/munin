@@ -90,6 +90,8 @@ else
   package 'munin'
 end
 
+package 'libcgi-fast-perl'
+
 case node['platform']
 when 'arch'
   cron 'munin-graph-html' do
