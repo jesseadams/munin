@@ -76,6 +76,10 @@ else
   end
 end
 
+if node['munin']['nodes'].is_a?(Array)
+  munin_servers += node['munin']['nodes']
+end
+
 if munin_servers.empty?
   Chef::Log.info 'No nodes returned from search, using this node so munin configuration has data'
   munin_servers = [node]
