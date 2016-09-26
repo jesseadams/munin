@@ -10,6 +10,16 @@
   CustomLog     <%= node['apache']['log_dir'] %>/munin_access.log combined
   ErrorLog      <%= node['apache']['log_dir'] %>/munin_error.log
 
+<% if @https -%>
+  SSLEngine On
+  SSLProtocol all -SSLv3 -SSLv2
+  SSLCertificateFile <%= @ssl_cert_file %>
+<% if node['munin']['ssl_cert_chain_file'] %>
+  SSLCertificateChainFile <%= node['munin']['ssl_cert_chain_file'] %>
+<% end -%>
+  SSLCertificateKeyFile <%= @ssl_cert_key %>
+
+<% end -%>
 <% case node['munin']['server_auth_method'] -%>
 <% when 'openid' -%>
   <Location />
@@ -17,6 +27,9 @@
     AuthType OpenID
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
+
+    Order allow,deny
+    Allow from all
   </Location>
 <% else -%>
   <Location />
@@ -24,6 +37,8 @@
     AuthType Basic
     AuthUserFile "<%= node['munin']['basedir'] %>/htpasswd.users"
     require valid-user
+    Order allow,deny
+    Allow from all
   </Location>
 <% end -%>
 

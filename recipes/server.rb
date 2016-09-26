@@ -90,6 +90,8 @@ else
   package 'munin'
 end
 
+package 'libcgi-fast-perl'
+
 case node['platform']
 when 'arch'
   cron 'munin-graph-html' do
@@ -124,6 +126,23 @@ end
 
 directory "#{node['munin']['basedir']}/munin-conf.d" do
   action :create
+end
+
+directory "#{node['munin']['basedir']}/certificates" do
+  owner 'munin'
+  group web_group
+  mode '0770'
+end
+
+bash 'Create SSL Certificates' do
+  cwd "#{node['munin']['basedir']}/certificates"
+  code <<-EOH
+  umask 007
+  openssl genrsa 2048 > munin-server.key
+  openssl req -subj "#{node['munin']['ssl_req']}" -new -x509 -nodes -sha1 -days 3650 -key munin-server.key > munin-server.crt
+  cat munin-server.key munin-server.crt > munin-server.pem
+  EOH
+  not_if { ::File.exist?("#{node['munin']['basedir']}/certificates/munin-server.pem") }
 end
 
 case node['munin']['server_auth_method']

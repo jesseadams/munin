@@ -37,6 +37,14 @@ Attributes
 - `node['munin']['server_role']` - role of the munin server. Default is monitoring.
 - `node['munin']['server_list']` - list of server ip addresses. This overrides `server_role`. Default is `nil`.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
+- `node['munin']['enable_ssl]` - boolean for whether Munin web server should be https, default false
+- `node['munin']['ssl_cert_file']` = Location of SSL Certificate File. default "/etc/munin/certificates/munin-server.pem"
+- `node['munin']['ssl_cert_chain_file']` = Optional location of SSL Intermediate Certificate File. No default.
+- `node['munin']['ssl_cert_key']`  = Location of SSL Certificate Key. default "/etc/munin/certificates/munin-server.pem"
+- `node['munin']['http_port']` - port that the Apache/Nginx virtual site should listen on, determined whether ssl is enabled (443 if so, otherwise 80). Note:  You will also need to configure the listening port for either NGINX or Apache within those cookbooks.
+- `node['munin']['server_name']` - common name to use in a server cert, default "munin"
+- `node['munin']['server']['server_alias']` - alias name for the webserver for use with Apache.  Defaults to nil
+- `node['munin']['ssl_req']` - info to use in a cert, default `/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=#{node['munin']['server_name']}/emailAddress=ops@#{node['munin']['server_name']}`
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
 - `node['munin']['public_domain']` - override munin domain.
 - `node['munin']['max_processes']` - Maximum number of simultaneous Munin-update processes. When not set, munin will use as many as necessary. Default is to use as many as necessary.
@@ -83,7 +91,7 @@ The htpasswd must be the hashed value. Get this value with htpasswd:
 % htpasswd -n -s munin
 New password:
 Re-type new password:
-nagiosadmin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
+munin:{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=
 ```
 
 For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
