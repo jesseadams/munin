@@ -74,6 +74,8 @@ else
   default['munin']['service_name'] = 'munin-node'
   default['munin']['node']['log_dir'] = '/var/log/munin'
 end
+default['munin']['ssl_cert_file'] = "#{default['munin']['basedir']}/certificates/munin-server.pem"
+default['munin']['ssl_cert_key'] = "#{default['munin']['basedir']}/certificates/munin-server.pem"
 
 default['munin']['plugins'] = "#{default['munin']['basedir']}/plugins"
 default['munin']['tmpldir'] = "#{default['munin']['basedir']}/templates"
