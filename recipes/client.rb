@@ -29,9 +29,9 @@ else
     munin_server_ips = [node['ipaddress']]
   else
     if node['munin']['multi_environment_monitoring']
-      munin_server_nodes = search(:node, "role:#{node['munin']['server_role']}")
+      munin_server_nodes = search(:node, "roles:#{node['munin']['server_role']}")
     else
-      munin_server_nodes = search(:node, "role:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
+      munin_server_nodes = search(:node, "roles:#{node['munin']['server_role']} AND chef_environment:#{node.chef_environment}")
     end
     munin_server_ips = munin_server_nodes
       .sort { |a, b| a['name'] <=> b['name'] }

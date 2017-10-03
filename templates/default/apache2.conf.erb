@@ -18,6 +18,7 @@
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
   </Location>
+<% when 'open' -%>
 <% else -%>
   <Location />
     AuthName "Munin Server"

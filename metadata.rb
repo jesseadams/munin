@@ -8,6 +8,7 @@ version           '1.4.3'
 
 depends 'apache2', '>= 1.7'
 depends 'nginx',   '>= 1.8'
+depends 'openresty', '>= 0.5.6'
 
 supports 'arch'
 supports 'centos'
