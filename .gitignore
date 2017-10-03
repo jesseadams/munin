@@ -19,3 +19,6 @@ Gemfile.lock
 bin/
 tmp/
 vendor/
+
+.idea
+*.iml
